@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="chatBotGUI.cs" />
     <Compile Include="ChatBotInteraction.cs" />
     <Compile Include="DiplayLogo.cs" />
     <Compile Include="Program.cs" />

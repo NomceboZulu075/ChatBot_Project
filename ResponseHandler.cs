@@ -26,6 +26,7 @@ namespace ChatBot_Project
             {
                 chatBotResponses.Add(line); 
 
+
             }
 
             return chatBotResponses;
@@ -50,7 +51,7 @@ namespace ChatBot_Project
                 }
 
             }
-            return "Sorry response not found :( ";
+            return "Sorry response not found :( Please try again!";
 
         }
 
