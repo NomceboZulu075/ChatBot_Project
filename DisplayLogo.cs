@@ -3,9 +3,9 @@ using System.IO;
 
 namespace ChatBot_Project
 {
-    public class DiplayLogo
+    public class DisplayLogo
     {
-        public DiplayLogo()
+        public DisplayLogo()
         {
             string filePath = "bot_logo.txt";
 

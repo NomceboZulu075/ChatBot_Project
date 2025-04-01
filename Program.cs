@@ -12,7 +12,7 @@ namespace ChatBot_Project
         {
 
             //Creating an instance of a class to handle the responses and the text file
-            new DiplayLogo() { };
+            new DisplayLogo() { };
 
             //Creating an instance of a class to allow the voice greeting to play
             new VoiceGreeting() { };
