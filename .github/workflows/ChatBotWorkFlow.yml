@@ -13,8 +13,8 @@ jobs:
     runs-on: windows-latest #Use the latest windows runner
 
     steps:
-    - name: Check Repository
-      uses: actions/check@v4 #Clones the repository
+    - name: Checkout Repository
+      uses: actions/checkout@v4 #Clones the repository
     
     - name: Set Up .NET
       uses: actions/setup-dotnet@v3
