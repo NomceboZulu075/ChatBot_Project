@@ -1,0 +1,32 @@
+name: C# Chatbot Project
+
+on:
+ push:
+  branches: 
+  -master #Runs on every push to master branch
+ pull_request:
+  branches: 
+  -master #Runs on every pull request to master 
+  
+  jobs:
+   build:
+    runs-on: windows-latest #Use the latest windows runner
+
+    steps:
+    -name: Check Repository
+    uses: actions/check@v4 #Clones the repository
+
+    -name: Set Up .NET
+    uses: actions/setup-dotnet@v3
+    with:
+    dotnet-version: '7.x'
+
+    -name: Restore Dependencies
+    run:dotnet restore #This ensures dependencies are installed
+
+    -name: Build the Project
+    run: dotnet build--no-restore
+    --configuration Release #Builds the project 
+
+    -name: 
+ 
