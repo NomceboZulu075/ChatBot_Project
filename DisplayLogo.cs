@@ -8,12 +8,12 @@ namespace ChatBot_Project
     {
         public DisplayLogo()
         {
-            string filePath = "bot_logo.txt";
+            string logoFilePath = "bot_logo.txt";
 
             //An if statement to handle an error if it happens that a file does not exist
-            if (File.Exists(filePath))
+            if (File.Exists(logoFilePath))
             {
-                string botLogo = File.ReadAllText(filePath);
+                string botLogo = File.ReadAllText(logoFilePath);
                 Console.WriteLine(botLogo);
             }
             else
@@ -21,6 +21,6 @@ namespace ChatBot_Project
                 Console.WriteLine("Sorry! File does not exist.");
             }
 
-        }
-    }
-}
+        }//end of constructor 
+    }//end of class 
+}//end of namespace

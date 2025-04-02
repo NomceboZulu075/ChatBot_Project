@@ -12,7 +12,7 @@ namespace ChatBot_Project
             //Declaring a string variable 
             string playSound = "Voice_Greeting.wav";
 
-            //If statement
+            //If statement to handle error if the sound file is not found
             if (File.Exists(playSound))
             {
                 SoundPlayer chatBotAudio = new SoundPlayer(playSound);
@@ -24,6 +24,6 @@ namespace ChatBot_Project
                 Console.WriteLine("Sorry :( File does not exist.");
            }
             
-        }
-    }
-}
+        }//end of constructor 
+    }//end of class 
+}//end of namespace
