@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace ChatBot_Project
 {
-    internal class Program
+    //Changing the internal keyword to public keyword
+    public class Program
     {
         static void Main(string[] args)
         {

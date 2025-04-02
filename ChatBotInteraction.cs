@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Threading;
 using Microsoft.SqlServer.Server;
 
 namespace ChatBot_Project
 {
+    //Changing the internal keyword to public keyword
     public class ChatBotInteraction
     {
 
@@ -78,7 +80,7 @@ namespace ChatBot_Project
             {
                 Console.WriteLine($"{chatBotName}: I see! If you'd like, I can share some security tips or fun facts.");
             }
-        
+
 
 
             //While loop to continue the chat until the user stops the program

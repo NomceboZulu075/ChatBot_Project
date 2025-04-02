@@ -3,6 +3,7 @@ using System.IO;
 
 namespace ChatBot_Project
 {
+    //Changing the internal keyword to public keyword
     public class DisplayLogo
     {
         public DisplayLogo()

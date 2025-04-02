@@ -4,6 +4,7 @@ using System.Media;
 
 namespace ChatBot_Project
 {
+    //Changing the internal keyword to public keyword
     public class VoiceGreeting
     {
         public VoiceGreeting()

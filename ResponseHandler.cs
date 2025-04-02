@@ -3,7 +3,8 @@ using System.IO;
 
 namespace ChatBot_Project
 {
-   public class ResponseHandler
+    //Changing the internal keyword to public keyword
+    public class ResponseHandler
     {
         //Declare a global variable to store the predefined responses from a file
         private ArrayList predefinedResponse;
@@ -58,4 +59,4 @@ namespace ChatBot_Project
 
     }//end of class
 
-}//edn of namespace
+}//end of namespace
