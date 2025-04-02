@@ -53,10 +53,13 @@ namespace ChatBot_Project
             userName = Console.ReadLine();
             Console.ResetColor(); //Colour resets back to white
 
-            //
+            //Declaring a variable to store the regex pattern 
             string pattern = @"^[a-zA-Z ]";
 
-            while (string.IsNullOrEmpty(userName) || !Regex.IsMatch(userName, pattern)) {
+            //Creating a while loop to handle an error for when the user dos not type anything on the field or if a user uses numbers and characters
+
+            while (string.IsNullOrEmpty(userName) || !Regex.IsMatch(userName, pattern)) 
+            {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($" {chatBotName}: Please your name!! Your name must not contain any numbers of charecters ");
                 Console.ResetColor() ;
