@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Microsoft.SqlServer.Server;
 
@@ -51,6 +52,20 @@ namespace ChatBot_Project
             Console.Write(userName + ": "); //Response of the user will be here
             userName = Console.ReadLine();
             Console.ResetColor(); //Colour resets back to white
+
+            //
+            string pattern = @"^[a-zA-Z ]";
+
+            while (string.IsNullOrEmpty(userName) || !Regex.IsMatch(userName, pattern)) {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($" {chatBotName}: Please your name!! Your name must not contain any numbers of charecters ");
+                Console.ResetColor() ;
+
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                Console.Write("You: "); //Response of the user will be here
+                userName = Console.ReadLine();
+                Console.ResetColor(); //Colour resets back to white
+            }
 
             //Asking the user how they are feeling today
             Console.ForegroundColor = ConsoleColor.DarkGray;
