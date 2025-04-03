@@ -123,7 +123,7 @@ namespace ChatBot_Project
                     break;
                 }//end of if statement
 
-                //
+                
                 string chatBotResponse = responseHandler.GetResponse(userInput);
                 Console.WriteLine($" {chatBotName}: {chatBotResponse}");
 

@@ -15,9 +15,8 @@ namespace ChatBot_Project
         public VoiceGreeting()
         {
 
-            //Getting where sound file is
+            //Getting the location of the sound file 
             string soundLocation = AppDomain.CurrentDomain.BaseDirectory;
-
 
             //Checking if it is getting the Directory
             Console.WriteLine(soundLocation);
@@ -33,8 +32,8 @@ namespace ChatBot_Project
 
         } //end of constructor
 
-        //Creating a method to play the .wav sound file
 
+        //Creating a method to play the .wav sound file
         private void playWav(string fullPath)
         {
             //Try and catch
@@ -53,31 +52,7 @@ namespace ChatBot_Project
                 Console.WriteLine( error.Message);
 
             }//end of try and catch 
-        }
 
-
-
-
-
-
-
-
-
-            /*Declaring a string variable 
-            string playSound = "Voice_Greeting.wav";
-
-            //If statement to handle error if the sound file is not found
-            if (File.Exists(playSound))
-            {
-                SoundPlayer chatBotAudio = new SoundPlayer(playSound);
-                chatBotAudio.Play();
-
-            }
-            else
-            {
-                Console.WriteLine("Sorry :( File does not exist.");
-           }*/
-            
-        
+        }//end of playWav method
     }//end of class 
 }//end of namespace

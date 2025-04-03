@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.IO;
 
 namespace ChatBot_Project
@@ -32,7 +33,7 @@ namespace ChatBot_Project
 
             return chatBotResponses;
 
-        }
+        } //end of foreach
 
         //Creating a public method because it needs to used in other classes
         //A method to compare user input and finding the best responses
@@ -49,12 +50,15 @@ namespace ChatBot_Project
                 {
                     return parts[1];
                     
-                }
+                }//end of if statement
 
-            }
+            } //end of foreach
+            
+            Console.ForegroundColor = ConsoleColor.Red;
             return "Sorry response not found :( Please try again!";
+            Console.ResetColor();
 
-        }
+        }// end of GetResponse method
 
 
     }//end of class

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using System.Security.Cryptography;
+
 
 namespace ChatBot_Project
 {
@@ -16,11 +16,9 @@ namespace ChatBot_Project
             //Replace the bin\\Debug\\
             string newLogoPath = logoPath.Replace("bin\\Debug", "");
 
-            //
             string fullPath = Path.Combine(newLogoPath, "Cybersecurity_Picture.jpg");
 
             //Time to start working on the logo using the ASCII
-
             Bitmap logoImage = new Bitmap(fullPath);
             logoImage = new Bitmap(logoImage, new Size(110, 50));
 
@@ -38,17 +36,15 @@ namespace ChatBot_Project
                     int colour = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
 
 
-                    //Now make use of char
+                    //Now making use of char to store the characters I will be using in my ASCII design
                     char ascii_design = colour > 200 ? '.' : colour > 150 ? '*' : colour > 100 ? 'O' : colour > 50 ? '#' : '@';
 
-                    Console.Write(ascii_design); //Displaying the ascii design 
-
+                    Console.Write(ascii_design); //Displaying the ascii design
 
                 }//end of inner loop 
 
                 Console.WriteLine(); //Skipping the line 
-                
-
+              
             }//end of outer for loop 
             
         }//end of constructor 

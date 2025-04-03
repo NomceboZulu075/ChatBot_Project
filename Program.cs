@@ -11,17 +11,15 @@ namespace ChatBot_Project
     {
         static void Main(string[] args)
         {
-            //Creating an instance of a class to allow the voice greeting to play
+            //Creating an instance of a class for Voice Greeting to allow the voice greeting to play
             new VoiceGreeting() { };
 
-            //Creating an instance of a class to handle the responses and the text file
+            //Creating an instance of a class for Display Logo to display the ASCII logo design
             new DisplayLogo() { };
 
-           
-
-            //Creating an instance of a class that handles the interactions 
+            //Creating an instance of a class for ChatBot Interaction that handles the interactions between the user and the chatbot 
             new ChatBotInteraction() { };
 
         }
-    }
+    }//end of class 
 }
