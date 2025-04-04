@@ -32,22 +32,17 @@ namespace ChatBot_Project
             //Displaying the welcome message
             Console.WriteLine("-------------------------------------------------------------------------------------------------------------------- ");
             Console.WriteLine("  **************************************************************");
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.WriteLine("  Welcome to the South African CyberSecurity Awareness Chatbot!");
-            Console.ResetColor();
+            typingEffect("  Welcome to the South African CyberSecurity Awareness Chatbot!", ConsoleColor.DarkCyan);
             Console.WriteLine("  **************************************************************");
 
             //Telling the user the purpose of this ChatBot
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
 
-            Console.WriteLine(" Here to help you spot phishing emails, craft uncrackable passwords and browse the web like a pro. \n ");
-            Console.ResetColor();
+            typingEffect(" Here to help you spot phishing emails, craft uncrackable passwords and browse the web like a pro. \n ", ConsoleColor.DarkCyan);
 
 
             //Asking the user for their name
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine($" {chatBotName}: Hello! My name is CyberBot.");
-            Console.WriteLine($" {chatBotName}: What is your name? ");
+            typingEffect($" {chatBotName}: Hello! My name is CyberBot.", ConsoleColor.DarkGray);
+            typingEffect($" {chatBotName}: What is your name? ", ConsoleColor.DarkGray);
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
             Console.Write(userName + ": "); //Response of the user will be here
             userName = Console.ReadLine();
@@ -60,9 +55,7 @@ namespace ChatBot_Project
 
             while (string.IsNullOrEmpty(userName) || !Regex.IsMatch(userName, pattern)) 
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($" {chatBotName}: Please your name!! Your name must not contain any numbers of charecters ");
-                Console.ResetColor() ;
+                typingEffect($" {chatBotName}: Please your name!! Your name must not contain any numbers of charecters ", ConsoleColor.Red);
 
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.Write("You: "); //Response of the user will be here
@@ -71,12 +64,10 @@ namespace ChatBot_Project
             }
 
             //Asking the user how they are feeling today
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine($" {chatBotName}: How are you feeling today {userName}?");
+            typingEffect($" {chatBotName}: How are you feeling today {userName}?", ConsoleColor.DarkGray);
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
             Console.Write(userName + ": ");
             string userFeeling = Console.ReadLine(); //Declaring and assigning a variable userInput
-            Console.ForegroundColor = ConsoleColor.DarkGray;
 
             /*
              * An if-else statement after the user has entered how they are feeling, if they are good,
@@ -84,19 +75,19 @@ namespace ChatBot_Project
              */
             if (userFeeling.Contains("good") || userFeeling.Contains("great") || userFeeling.Contains("happy"))
             {
-                Console.WriteLine($"{chatBotName}: I'm glad to hear that {userName}!");
+                typingEffect($"{chatBotName}: I'm glad to hear that {userName}!", ConsoleColor.DarkGray);
             }
             else if (userFeeling.Contains("sad") || userFeeling.Contains("not good") || userFeeling.Contains("bad"))
             {
-                Console.WriteLine($"{chatBotName}: I'm sorry to hear that {userName}. If you need a distraction, I can share some cybersecurity.");
+                typingEffect($"{chatBotName}: I'm sorry to hear that {userName}. If you need a distraction, I can share some cybersecurity.", ConsoleColor.DarkGray);
             }
             else if (userFeeling.Contains("tired") || userFeeling.Contains("stressed"))
             {
-                Console.WriteLine($"{chatBotName}: Take a break and relax {userName}! Also, remember to stay safe from cyber threats.");
+                typingEffect($"{chatBotName}: Take a break and relax {userName}! Also, remember to stay safe from cyber threats.", ConsoleColor.DarkGray);
             }
             else
             {
-                Console.WriteLine($"{chatBotName}: I see! If you'd like, I can share some security tips or fun facts.");
+                typingEffect($"{chatBotName}: I see! If you'd like, I can share some security tips or fun facts.", ConsoleColor.DarkGray);
             }
 
 
@@ -106,30 +97,55 @@ namespace ChatBot_Project
             {
 
                 //Asking the user how the ChatBot should assist them 
-                Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine($" {chatBotName}: So, how may I be of assistance to you today {userName}?");
+                typingEffect($" {chatBotName}: So, how may I be of assistance to you today {userName}?", ConsoleColor.DarkGray);
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.Write(userName + ": ");
                 string userInput = Console.ReadLine(); //Declaring and assigning a variable userInput
-                Console.ForegroundColor = ConsoleColor.DarkGray;
 
 
                 //An if statement for when the user types out exit, the ChatBot will say "Goodbye" and the program will stop
                 if (userInput.ToLower() == "exit")
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
-                    Console.WriteLine($" {chatBotName}: Goodbye {userName}!");
+                    typingEffect($" {chatBotName}: Goodbye {userName}!", ConsoleColor.DarkGray);
                     Console.WriteLine("-------------------------------------------------------------------------------------------------------------------- ");
                     break;
                 }//end of if statement
 
                 
                 string chatBotResponse = responseHandler.GetResponse(userInput);
-                Console.WriteLine($" {chatBotName}: {chatBotResponse}");
+                typingEffect($" {chatBotName}: {chatBotResponse}", ConsoleColor.DarkGray);
 
             }// end of while loop
 
 
         }// end of BeginChat method
+
+        //Creating a typing effect method
+
+        private void typingEffect(string response, ConsoleColor color)
+        {
+
+            //Declaring a variable to store the speed 
+            int speed = 50;
+
+            //Declare the foreground colour 
+            Console.ForegroundColor = color;
+
+            //A for each loop that will loop through the string
+
+            foreach (char character in response)
+            {
+
+                //Displaying each character
+                Console.Write(character);
+
+                //Delay the display of each character
+                System.Threading.Thread.Sleep(speed);
+
+            }
+            Console.WriteLine();
+            Console.ResetColor();
+        }
+
     }//end of class
 }//end of namespace

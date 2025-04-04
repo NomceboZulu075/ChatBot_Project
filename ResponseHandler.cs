@@ -55,8 +55,7 @@ namespace ChatBot_Project
             } //end of foreach
             
             Console.ForegroundColor = ConsoleColor.Red;
-            return "Sorry response not found :( Please try again!";
-            Console.ResetColor();
+            return "Sorry response not found :( Could you please try rephrasing that. Ask anything related to cybersecurity!";
 
         }// end of GetResponse method
 
