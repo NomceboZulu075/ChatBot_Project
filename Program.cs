@@ -20,7 +20,7 @@ namespace ChatBot_Project
             //Creating an instance of a class for ChatBot Interaction that handles the interactions between the user and the chatbot 
             new ChatBotInteraction() { };
 
-            //Creating a class to have three methods that will:
+            //Creating a class that will have three methods that will:
             /*
              * 1. Check and create file
              * 2. Get what is stored in the text file 
