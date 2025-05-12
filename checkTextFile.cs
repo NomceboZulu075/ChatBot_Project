@@ -55,7 +55,18 @@ namespace ChatBot_Project
             
         }//end of returnMemory method
 
-        //Here, I will be doing the third method where
+        //Here, I will be doing the third method where I will be writing and adding to the text file
+        //For the parameter, I am going to pass the List
+        public void saveMemory(List<string> saveNew)
+        {
+            //Getting the path of the text file
+            string path = returnPath();
+
+            //Writing into the text file
+            File.WriteAllLines(path, saveNew);
+
+        } //end of saveMemory method
+
 
     }//end of class
 }//end of namespace
