@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChatBotInteraction.cs" />
+    <Compile Include="checkTextFile.cs" />
     <Compile Include="DisplayLogo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
