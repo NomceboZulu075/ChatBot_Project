@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System;
 using System.Security.Policy;
+using System.Collections.Generic;
 
 namespace ChatBot_Project
 {
@@ -32,11 +33,29 @@ namespace ChatBot_Project
             //Checking if the file exists or not, and if not found it will be created
             if (!File.Exists(textPath)) 
             { 
-                //
+                //The ! tells me that if the file is not found in the path, it will be created
+                File.CreateText(textPath);  
             }
-
+            else
+            {
+                //If the file is found in the path, a message will be displayed
+                Console.WriteLine("File is found...");
+            }//End of if-else statement
 
         }//end of checkFile method
+
+        //Here, I will be doing the second method where I will get what is stored in the text file 
+        public List <string> returnMemory() 
+        {
+            //Getting the path of the file
+            string path = returnPath();
+
+            //This return method will return all the content in the text file
+            return new List<string>(File.ReadAllLines(path));
+            
+        }//end of returnMemory method
+
+        //Here, I will be doing the third method where
 
     }//end of class
 }//end of namespace
