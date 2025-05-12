@@ -29,6 +29,23 @@ namespace ChatBot_Project
             
             checkTextFile checkExist = new checkTextFile();
 
+            //Using the object called checkExist, I will use this object to get the methods in the checkTextFile class
+
+            //First class to call:
+            checkExist.checkFile();
+
+            //Second class to call:
+            List<string> memory = checkExist.returnMemory();
+
+            //Using a foreach to list all memory values
+
+
+
+            //Third class to call: 
+
+
+
+
         }
     }//end of class 
 }

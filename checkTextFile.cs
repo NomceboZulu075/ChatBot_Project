@@ -15,7 +15,7 @@ namespace ChatBot_Project
             //Using an AppDomain to get me the full path
             string fullPath = AppDomain.CurrentDomain.BaseDirectory;
 
-            //Replacing the bin\debug\ so it can get the path of the text file
+            //Replacing the bin/debug/ so it can get the path of the text file
             string newPath = fullPath.Replace("bin\\Debug\\", "");
 
             //Combining the path of the text file with the updated path
