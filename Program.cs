@@ -20,13 +20,36 @@ namespace ChatBot_Project
             //Creating an instance of a class for ChatBot Interaction that handles the interactions between the user and the chatbot 
             new ChatBotInteraction() { };
 
+            //************************* PART 2 *********************
+
+            //Creating an instance a class called keywordRecognition that will help accurately recognize cybersecurity-related keywords and respond accordingly.
+            keywordRecognition recognize = new keywordRecognition();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             //Creating a class that will have three methods that will:
             /*
              * 1. Check and create file
              * 2. Get what is stored in the text file 
              * 3. Add or write into the text file
              */
-            
+
+            //Instatiating the checkTextFile 
             checkTextFile checkExist = new checkTextFile();
 
             //Using the object called checkExist, I will use this object to get the methods in the checkTextFile class
@@ -38,6 +61,12 @@ namespace ChatBot_Project
             List<string> memory = checkExist.returnMemory();
 
             //Using a foreach to list all memory values
+            foreach (string check in memory)
+            {
+                Console.WriteLine(check);
+            }//end of foreach loop
+
+            //Prompting the user and saving what is entered by the user in the MemoryRecallFile
 
 
 
