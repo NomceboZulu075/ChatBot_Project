@@ -126,7 +126,7 @@ namespace ChatBot_Project
         {
 
             //Declaring a variable to store the speed 
-            int speed = 50;
+            int speed = 60;
 
             //Declare the foreground colour 
             Console.ForegroundColor = color;
