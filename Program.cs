@@ -22,14 +22,8 @@ namespace ChatBot_Project
 
             //************************* PART 2 *********************
 
-            //1. Creating an instance a class called keywordRecognition that will help accurately recognize cybersecurity-related keywords and respond accordingly.
-            KeywordRecognition recognize = new KeywordRecognition();
+           
 
-            // Prompting user for input
-            Console.Write("Enter a cybersecurity topic or question: ");
-            string userInput = Console.ReadLine();
-
-            recognize.recognizeKeywords(userInput); //Pass input to keyword recognition method
 
             //2. Creating an instance class called randomisation, there will be no constructor here
             Randomisation outputIndex = new Randomisation();

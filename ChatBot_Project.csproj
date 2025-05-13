@@ -47,7 +47,6 @@
     <Compile Include="ChatBotInteraction.cs" />
     <Compile Include="CheckTextFile.cs" />
     <Compile Include="DisplayLogo.cs" />
-    <Compile Include="KeywordRecognition.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Randomisation.cs" />

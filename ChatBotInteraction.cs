@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Microsoft.SqlServer.Server;
@@ -11,6 +13,14 @@ namespace ChatBot_Project
 
         //Declaring a global variable reponse handler to access the response handler class
         private ResponseHandler responseHandler;
+
+        //Dictionary to store cybersecurity keywords and associated responses
+        private Dictionary<string, string> keywordResponses = new Dictionary<string, string>()
+        {
+            {"password", "Ensure your passwords are strong and unique. Use two-factor authentication for added security."},
+            {"scam", "Be cautious when sharing personal information online. Look out for phishing scams!"},
+            {"privacy", "Adjust your privacy settings regularly and avoid oversharing on social media."}
+    };
 
         public ChatBotInteraction()
         {
@@ -114,6 +124,23 @@ namespace ChatBot_Project
                 
                 string chatBotResponse = responseHandler.GetResponse(userInput);
                 typingEffect($" {chatBotName}: {chatBotResponse}", ConsoleColor.DarkGray);
+
+                //Section for Part 2, keyword recognition
+                bool foundKeyword = false;
+
+                //A foreach loop to look through predefined keywords and check if they exist in the user's input
+                foreach (var keyword in keywordResponses.Keys)
+                {
+                    //Using StringComparison.OrdinalIgnoreCase to use case-insensitive comparison and to detect keyword presence within larger phrases
+                    //An if statement to check if the user inpout contains a keyword, and if found, a message will be displayed
+                    if (userInput.ToLower().Contains(keyword))
+                    {
+                        Console.WriteLine($"Keyword Detected: '{keyword}'"); // Informs user of detected keyword
+                        Console.WriteLine($"Cybersecurity Tip: {keywordResponses[keyword]}"); // Displays relevant cybersecurity tip
+                        foundKeyword = true;
+                        break;
+                    }//end of if-statement
+                }//end of foreach loop
 
             }// end of while loop
 
