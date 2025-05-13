@@ -22,7 +22,7 @@ namespace ChatBot_Project
 
             //************************* PART 2 *********************
 
-            //Creating an instance a class called keywordRecognition that will help accurately recognize cybersecurity-related keywords and respond accordingly.
+            //1. Creating an instance a class called keywordRecognition that will help accurately recognize cybersecurity-related keywords and respond accordingly.
             KeywordRecognition recognize = new KeywordRecognition();
 
             // Prompting user for input
@@ -31,28 +31,16 @@ namespace ChatBot_Project
 
             recognize.recognizeKeywords(userInput); //Pass input to keyword recognition method
 
-            //Creating an instance class called randomisation, there will be no constructor here
+            //2. Creating an instance class called randomisation, there will be no constructor here
             Randomisation outputIndex = new Randomisation();
 
+            //Using the object name output index to call the returnIndex method in Randomisation class
+            //First, display the values found
+
+            Console.WriteLine(outputIndex.returnIndex());
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //Creating a class that will have three methods that will:
+            //3. Creating a class that will have three methods that will:
             /*
              * 1. Check and create file
              * 2. Get what is stored in the text file 
