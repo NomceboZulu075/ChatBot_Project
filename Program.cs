@@ -25,6 +25,13 @@ namespace ChatBot_Project
             //Creating an instance a class called keywordRecognition that will help accurately recognize cybersecurity-related keywords and respond accordingly.
             keywordRecognition recognize = new keywordRecognition();
 
+            // Prompting user for input
+            Console.Write("So, how may I be of assistance to you today {userName}?", ConsoleColor.DarkGray);
+            string userInput = Console.ReadLine();
+
+            recognize.recognizeKeywords(userInput); //Pass input to keyword recognition method
+
+
 
 
 
