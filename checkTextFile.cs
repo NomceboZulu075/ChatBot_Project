@@ -2,6 +2,7 @@
 using System;
 using System.Security.Policy;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ChatBot_Project
 {
@@ -34,7 +35,8 @@ namespace ChatBot_Project
             if (!File.Exists(textPath)) 
             { 
                 //The ! tells me that if the file is not found in the path, it will be created
-                File.CreateText(textPath);  
+                File.CreateText(textPath);
+                Console.WriteLine("Memory Recall Text File created successfully!");    
             }
             else
             {
@@ -45,13 +47,28 @@ namespace ChatBot_Project
         }//end of checkFile method
 
         //Here, I will be doing the second method where I will get what is stored in the text file 
-        public List <string> returnMemory() 
+        public List<string> returnMemory()
         {
             //Getting the path of the file
             string path = returnPath();
+            List<string> fileContents = new List<string>();
 
-            //This return method will return all the content in the text file
-            return new List<string>(File.ReadAllLines(path));
+            try { 
+            if (File.Exists(path))
+            {
+                fileContents = File.ReadAllLines(path).ToList();
+            }
+            else
+            {
+                Console.WriteLine("File not found...");
+            }
+        }
+        catch (Exception e)
+            {
+                Console.WriteLine($"Error Reading File: {e.Message}");
+            }//end of try and catch
+
+            return fileContents;
             
         }//end of returnMemory method
 
