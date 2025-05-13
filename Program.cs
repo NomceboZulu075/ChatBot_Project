@@ -23,13 +23,16 @@ namespace ChatBot_Project
             //************************* PART 2 *********************
 
             //Creating an instance a class called keywordRecognition that will help accurately recognize cybersecurity-related keywords and respond accordingly.
-            keywordRecognition recognize = new keywordRecognition();
+            KeywordRecognition recognize = new KeywordRecognition();
 
             // Prompting user for input
-            Console.Write("So, how may I be of assistance to you today {userName}?", ConsoleColor.DarkGray);
+            Console.Write("Enter a cybersecurity topic or question: ");
             string userInput = Console.ReadLine();
 
             recognize.recognizeKeywords(userInput); //Pass input to keyword recognition method
+
+            //Creating an instance class called randomisation, there will be no constructor here
+            Randomisation outputIndex = new Randomisation();
 
 
 
@@ -57,7 +60,7 @@ namespace ChatBot_Project
              */
 
             //Instatiating the checkTextFile 
-            checkTextFile checkExist = new checkTextFile();
+            CheckTextFile checkExist = new CheckTextFile();
 
             //Using the object called checkExist, I will use this object to get the methods in the checkTextFile class
 

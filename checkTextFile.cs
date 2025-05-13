@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace ChatBot_Project
 {
     //Changing the internal keyword to public keyword
-    public class checkTextFile
+    public class CheckTextFile
     {
         //Creating a string method that will return a path
         //AppDomain as a global gives an error, therefore, I will do a return method that will return the path
