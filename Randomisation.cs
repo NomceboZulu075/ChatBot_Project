@@ -1,4 +1,5 @@
-﻿using System; //Adding an import
+﻿using System;
+using System.Collections.Generic; //Adding an import
 
 namespace ChatBot_Project
 {
@@ -8,7 +9,18 @@ namespace ChatBot_Project
     {
 
         //Creating a string method that will return the final index
-        public string
+        public string returnIndex()
+        {
+            //Create an instance class for the List, this is called generic
+            List <string> answers = new List<string> ();
+
+
+
+
+
+
+
+        }//end of return index method
 
 
 
