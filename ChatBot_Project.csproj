@@ -49,7 +49,6 @@
     <Compile Include="DisplayLogo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Randomisation.cs" />
     <Compile Include="ResponseHandler.cs" />
     <Compile Include="VoiceGreeting.cs" />
   </ItemGroup>

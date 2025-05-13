@@ -17,22 +17,10 @@ namespace ChatBot_Project
             //Creating an instance of a class for Display Logo to display the ASCII logo design
             new DisplayLogo() { };
 
-            //Creating an instance of a class for ChatBot Interaction that handles the interactions between the user and the chatbot 
+            //Creating an instance of a class for ChatBot Interaction that handles the interactions between the user and the chatbot, this is where keyword recognition will occur 
             new ChatBotInteraction() { };
 
             //************************* PART 2 *********************
-
-           
-
-
-            //2. Creating an instance class called randomisation, there will be no constructor here
-            Randomisation outputIndex = new Randomisation();
-
-            //Using the object name output index to call the returnIndex method in Randomisation class
-            //First, display the values found
-
-            Console.WriteLine(outputIndex.returnIndex());
-
 
             //3. Creating a class that will have three methods that will:
             /*

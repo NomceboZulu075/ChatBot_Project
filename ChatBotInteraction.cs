@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Microsoft.SqlServer.Server;
@@ -22,6 +25,9 @@ namespace ChatBot_Project
             {"privacy", "Adjust your privacy settings regularly and avoid oversharing on social media."}
     };
 
+        // Dictionary containing multiple cybersecurity topics with different sets of tips
+        private Dictionary<string, List<string>> securityTips;
+
         public ChatBotInteraction()
         {
             //Assigning variable responseHandler to responsehandler constructor so that all methods from that class are accessible
@@ -29,6 +35,29 @@ namespace ChatBot_Project
 
             //Calling the method BegibnChat inside the constructor
             BeginChat();
+
+            // Defining different cybersecurity categories with randomized tips
+                securityTips["phishing"] = new List<string>(
+                    "Be careful of emails requesting for personal information.|" +
+                    "Verify the sender's email address before responding.|" +
+                    "Look for spelling and grammatical errors in suspicious emails.|" +
+                    "Be alert of urgent or threatening language in messages.".Split('|')),
+
+
+                ["password"] = new List<string>(
+                    "Use a mix of uppercase, lowercase, numbers, and symbols in your passwords.|" +
+                    "Enable two-factor authentication whenever possible.|" +
+                    "Avoid using personal information (like your name or birthdate) in passwords.|" +
+                    "Use a password manager to keep track of complex passwords.".Split('|').ToList()
+                    ),
+                ["privacy"] = new List<string>(
+                   "Adjust privacy settings on social media to limit who can view your information.|" +
+                   "Be cautious about sharing sensitive data online, even in private messages.|" +
+                   "Turn off location tracking on apps that don’t require it.|" +
+                   "Regularly review what data apps collect and remove unnecessary permissions.".Split('|').ToList()
+
+                    )
+            };
 
         }//end of constructor
 
@@ -125,6 +154,16 @@ namespace ChatBot_Project
                 string chatBotResponse = responseHandler.GetResponse(userInput);
                 typingEffect($" {chatBotName}: {chatBotResponse}", ConsoleColor.DarkGray);
 
+                //Section for Part 2, random responses
+                foreach (var topic in securityTips.Keys)
+                {
+                    if (userInput.ToLower().Contains(topic))
+                    {
+                        Console.WriteLine(getRandomSecurityTip(topic));
+                        continue; //Continue to next input without having to check other keywords
+                    }//end of if-statement
+                }//end of foreach loop
+
                 //Section for Part 2, keyword recognition
                 bool foundKeyword = false;
 
@@ -142,10 +181,30 @@ namespace ChatBot_Project
                     }//end of if-statement
                 }//end of foreach loop
 
+                //A message will be displayed if no keyword or topic matches, an if statement will be used
+                if (!foundKeyword)
+                {
+                    Console.WriteLine("I'm not sure about that topic, but always prioritize online security!");
+                }//end of if-statement
             }// end of while loop
-
-
         }// end of BeginChat method
+
+        //A method to retrieve a random tip for a given cybersecurity topic
+        private string getRandomSecurityTip(string topic)
+        {
+            if (securityTips.ContainsKey(topic))
+            {
+                Random random = new Random();
+                return securityTips[topic][random.Next(securityTips[topic].Count)];
+            }
+            else
+            {
+                return "I don't have tips for that topic, but always prioritize cybersecurity!";
+            }//end of if-else 
+
+        }//end of method getRandomSecurityTip
+
+
 
         //Creating a typing effect method
 
@@ -169,10 +228,9 @@ namespace ChatBot_Project
                 //Delay the display of each character
                 System.Threading.Thread.Sleep(speed);
 
-            }
+            }//end of foreach loop
             Console.WriteLine();
             Console.ResetColor();
-        }
-
+        }//end of typing effect method
     }//end of class
 }//end of namespace
