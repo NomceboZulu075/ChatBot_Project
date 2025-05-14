@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Text.RegularExpressions;
@@ -18,48 +19,39 @@ namespace ChatBot_Project
         private ResponseHandler responseHandler;
 
         //Dictionary to store cybersecurity keywords and associated responses
-        private Dictionary<string, string> keywordResponses = new Dictionary<string, string>()
+        private Dictionary<string, string> keywordResponses = new Dictionary<string, string>
         {
-            {"password", "Ensure your passwords are strong and unique. Use two-factor authentication for added security."},
-            {"scam", "Be cautious when sharing personal information online. Look out for phishing scams!"},
-            {"privacy", "Adjust your privacy settings regularly and avoid oversharing on social media."}
-    };
+            { "password", "Ensure your passwords are strong and unique. Use two-factor authentication for added security."},
+            { "scam", "Be cautious when sharing personal information online. Look out for phishing scams!"},
+            { "privacy", "Adjust your privacy settings regularly and avoid oversharing on social media."},
+            { "phishing", "gfgfgfgfgfgfgfgdfddgdfgdgdgdgdgdgdfg" }
 
-        // Dictionary containing multiple cybersecurity topics with different sets of tips
-        private Dictionary<string, List<string>> securityTips;
+        };
+
+        //List to store conversation memory for recall functionality
+        private List<string> conversationMemory;
+
+        // File path to store conversation history
+        private string memoryFilePath = "MemoryRecallFile.txt";
+
 
         public ChatBotInteraction()
         {
             //Assigning variable responseHandler to responsehandler constructor so that all methods from that class are accessible
             responseHandler = new ResponseHandler();
 
-            //Calling the method BegibnChat inside the constructor
+            //Calling the method BeginChat inside the constructor
             BeginChat();
 
-            // Defining different cybersecurity categories with randomized tips
-                securityTips["phishing"] = new List<string>(
-                    "Be careful of emails requesting for personal information.|" +
-                    "Verify the sender's email address before responding.|" +
-                    "Look for spelling and grammatical errors in suspicious emails.|" +
-                    "Be alert of urgent or threatening language in messages.".Split('|')),
+            string fullPath = AppDomain.CurrentDomain.BaseDirectory;
+            string path = Path.Combine(fullPath, "MemoryRecallFile.txt");
 
-
-                ["password"] = new List<string>(
-                    "Use a mix of uppercase, lowercase, numbers, and symbols in your passwords.|" +
-                    "Enable two-factor authentication whenever possible.|" +
-                    "Avoid using personal information (like your name or birthdate) in passwords.|" +
-                    "Use a password manager to keep track of complex passwords.".Split('|').ToList()
-                    ),
-                ["privacy"] = new List<string>(
-                   "Adjust privacy settings on social media to limit who can view your information.|" +
-                   "Be cautious about sharing sensitive data online, even in private messages.|" +
-                   "Turn off location tracking on apps that don’t require it.|" +
-                   "Regularly review what data apps collect and remove unnecessary permissions.".Split('|').ToList()
-
-                    )
-            };
+            // Initializing memory storage and loading previous chats if available
+            conversationMemory = new List<string>();
+            LoadMemory(path);
 
         }//end of constructor
+
 
         //Creating a method to begin the program
         private void BeginChat()
@@ -87,12 +79,14 @@ namespace ChatBot_Project
             userName = Console.ReadLine();
             Console.ResetColor(); //Colour resets back to white
 
+            //
+
             //Declaring a variable to store the regex pattern 
             string pattern = @"^[a-zA-Z ]";
 
             //Creating a while loop to handle an error for when the user dos not type anything on the field or if a user uses numbers and characters
 
-            while (string.IsNullOrEmpty(userName) || !Regex.IsMatch(userName, pattern)) 
+            while (string.IsNullOrEmpty(userName) || !Regex.IsMatch(userName, pattern))
             {
                 typingEffect($" {chatBotName}: Please your name!! Your name must not contain any numbers of charecters ", ConsoleColor.Red);
 
@@ -150,19 +144,19 @@ namespace ChatBot_Project
                     break;
                 }//end of if statement
 
-                
+                if (conversationMemory == null)
+                {
+                    conversationMemory = new List<string>();
+                }
+
+
+                conversationMemory.Add(userInput);
+                SaveMemory();
+
+
                 string chatBotResponse = responseHandler.GetResponse(userInput);
                 typingEffect($" {chatBotName}: {chatBotResponse}", ConsoleColor.DarkGray);
 
-                //Section for Part 2, random responses
-                foreach (var topic in securityTips.Keys)
-                {
-                    if (userInput.ToLower().Contains(topic))
-                    {
-                        Console.WriteLine(getRandomSecurityTip(topic));
-                        continue; //Continue to next input without having to check other keywords
-                    }//end of if-statement
-                }//end of foreach loop
 
                 //Section for Part 2, keyword recognition
                 bool foundKeyword = false;
@@ -170,12 +164,14 @@ namespace ChatBot_Project
                 //A foreach loop to look through predefined keywords and check if they exist in the user's input
                 foreach (var keyword in keywordResponses.Keys)
                 {
-                    //Using StringComparison.OrdinalIgnoreCase to use case-insensitive comparison and to detect keyword presence within larger phrases
+
                     //An if statement to check if the user inpout contains a keyword, and if found, a message will be displayed
-                    if (userInput.ToLower().Contains(keyword))
+                    if (userInput.Contains(keyword))
                     {
                         Console.WriteLine($"Keyword Detected: '{keyword}'"); // Informs user of detected keyword
+
                         Console.WriteLine($"Cybersecurity Tip: {keywordResponses[keyword]}"); // Displays relevant cybersecurity tip
+
                         foundKeyword = true;
                         break;
                     }//end of if-statement
@@ -184,12 +180,13 @@ namespace ChatBot_Project
                 //A message will be displayed if no keyword or topic matches, an if statement will be used
                 if (!foundKeyword)
                 {
-                    Console.WriteLine("I'm not sure about that topic, but always prioritize online security!");
+                    Console.WriteLine(RecallPreviousMessage(userInput));
+                   
                 }//end of if-statement
             }// end of while loop
         }// end of BeginChat method
 
-        //A method to retrieve a random tip for a given cybersecurity topic
+        /*A method to retrieve a random tip for a given cybersecurity topic
         private string getRandomSecurityTip(string topic)
         {
             if (securityTips.ContainsKey(topic))
@@ -203,6 +200,55 @@ namespace ChatBot_Project
             }//end of if-else 
 
         }//end of method getRandomSecurityTip
+        */
+        //Searches memory to recall previous user inquiries related to the current input
+        private string RecallPreviousMessage(string userInput)
+        {
+            //A foreach loop to iterate through all saved user inputs stored in the conversationMemory list
+            //Chatbot will search whether the current user input matches any previously recorded message
+
+            if (string.IsNullOrWhiteSpace(userInput))
+            {
+                return "I'm not sure about that topic, but always prioritize online security!";
+            }
+
+            foreach (string pastMessage in conversationMemory)
+            {
+                //If-statement to 
+                if(pastMessage.Contains(userInput))
+                {
+                    
+                    return $"Great! I'll remember that you're interested in {userInput}. It is an important part of staying safe online.";
+                }//end of if statement 
+            }//end of foreach loop 
+
+            return "";
+
+        }//end of recall previous memory method 
+
+        //Saving conversation history to a file for persistence across sessions
+        private void SaveMemory()
+        {
+            File.WriteAllLines(memoryFilePath, conversationMemory);
+        }//end of save memory method
+
+        //Loading conversation history from file if it exists
+        private List<string> LoadMemory(string path) 
+        {
+            //Checking if the file exists using an if statement 
+            if(File.Exists(memoryFilePath))
+            {
+                return new List<string>(File.ReadAllLines(memoryFilePath));
+            }//end of if statement
+
+            else
+            {
+                //Creating the text file 
+                File.CreateText(path);
+                return new List<string>();
+            }
+        }//end of load memory method 
+
 
 
 
@@ -212,7 +258,7 @@ namespace ChatBot_Project
         {
 
             //Declaring a variable to store the speed 
-            int speed = 60;
+            int speed = 40;
 
             //Declare the foreground colour 
             Console.ForegroundColor = color;
