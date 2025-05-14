@@ -21,8 +21,9 @@ namespace ChatBot_Project
             new ChatBotInteraction() { };
 
             //************************* PART 2 *********************
+            //1. 
 
-            //3. Creating a class that will have three methods that will:
+            //2. Creating a class that will have three methods that will:
             /*
              * 1. Check and create file
              * 2. Get what is stored in the text file 

@@ -27,8 +27,6 @@ namespace ChatBot_Project
             foreach (string line in File.ReadAllLines(responseFile))
             {
                 chatBotResponses.Add(line); 
-
-
             }
 
             return chatBotResponses;
