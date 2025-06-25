@@ -50,10 +50,10 @@ namespace ChatBot_Project
         // Sentiment categories and the words associated with each feeling
         private Dictionary<string, List<string>> sentiments = new Dictionary<string, List<string>>
         {
-            { "worried", new List<string> { "worried", "concerned", "afraid", "scared", "anxious", "nervous", "fear" } },
-            { "curious", new List<string> { "curious", "interested", "wondering", "want to know", "tell me about", "learn" } },
-            { "frustrated", new List<string> { "frustrated", "confused", "difficult", "hard", "complicated", "annoying", "struggle" } },
-            { "positive", new List<string> { "thanks", "helpful", "great", "good", "excellent", "amazing", "appreciate" } }
+            { "worried", new List<string> { "worried", "concerned", "afraid", "scared", "anxious", "nervous", "fear", "frightened" } },
+            { "curious", new List<string> { "curious", "interested", "wondering", "want to know", "tell me about", "learn", "how", "what" } },
+            { "frustrated", new List<string> { "frustrated", "confused", "difficult", "hard", "complicated", "annoying", "struggle", "don't understand" } },
+            { "positive", new List<string> { "thanks", "helpful", "great", "good", "excellent", "amazing", "appreciate", "wonderful", "awesome" } }
         }; //end of sentiment dictionary
 
         // A method that adjusts chatbot tone based on detected sentiment
@@ -62,16 +62,16 @@ namespace ChatBot_Project
             switch (sentiment)
             {
                 case "worried":
-                    Console.WriteLine("I understand this may be concerning. Let me help you...");
+                    Console.WriteLine("I understand this may be concerning. Let me help you feel more secure...", ConsoleColor.Yellow);
                     break;
                 case "frustrated":
-                    Console.WriteLine("I appreciate your patience. Let us work through this together.");
+                    Console.WriteLine("I appreciate your patience. Let us work through this together step by step.", ConsoleColor.Yellow);
                     break;
                 case "curious":
-                    Console.WriteLine("Curiosity is the first step to discovery—let’s explore this together!");
+                    Console.WriteLine("Curiosity is the first step to discovery—let’s explore this together!", ConsoleColor.Yellow);
                     break;
                 case "positive":
-                    Console.WriteLine(" love that enthusiasm! Keep spreading the good energy!");
+                    Console.WriteLine("I love that enthusiasm! Keep spreading the good energy!", ConsoleColor.Yellow);
                     break;
             }//end of switch
         }//end of method adjust response for sentiment
