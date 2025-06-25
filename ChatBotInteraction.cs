@@ -312,35 +312,52 @@ namespace ChatBot_Project
                 return "I'm not sure about that topic, but always prioritize online security!";
             }
 
+            // Check if we've discussed similar topics before
             foreach (string pastMessage in conversationMemory)
             {
-                if (pastMessage.Contains(userInput))
+                if (pastMessage.ToLower().Contains(userInput.ToLower()))
                 {
-                    return $"Great! I'll remember that you're interested in {userInput}. It is an important part of staying safe online.";
+                    return $"I remember we discussed something similar before. It's an important part of staying safe online.";
                 }
             }
-
-            return "That's an interesting point. Let me gather more on that topic for next time.";
-        }//end of if statement recall previous message
+            // Default response for unrecognized input
+            return "That's an interesting point. Let me gather more on that topic for next time. For now ask me anything related to cybersecurity like passwords, phishing, privacy or scams!";
+        
+        }//end of recall previous message method
 
         // Saves the chat history to a file
         private void SaveMemory()
         {
-            string fullPath = AppDomain.CurrentDomain.BaseDirectory;
-            string path = Path.Combine(fullPath, memoryFilePath);
-            File.WriteAllLines(path, conversationMemory); 
+            try
+            {
+                string fullPath = AppDomain.CurrentDomain.BaseDirectory;
+                string path = Path.Combine(fullPath, memoryFilePath);
+                File.WriteAllLines(path, conversationMemory);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving memory: {ex.Message}");
+            }
         }//end of save memory method
 
         // Loads memory from file if it exists, or creates a new file
         private List<string> LoadMemory(string path)
         {
-            if (File.Exists(path)) // 
+            try
             {
-                return new List<string>(File.ReadAllLines(path));
+                if (File.Exists(path))
+                {
+                    return new List<string>(File.ReadAllLines(path));
+                }
+                else
+                {
+                    File.CreateText(path).Close();
+                    return new List<string>();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                File.CreateText(path).Close();
+                Console.WriteLine($"Error loading memory: {ex.Message}");
                 return new List<string>();
             }
         }// end of loadmemory method
