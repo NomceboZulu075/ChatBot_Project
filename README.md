@@ -17,6 +17,14 @@ The purpose of this project is to educate users by providing basic cybersecurity
 - Cyber Security Threat Awareness: The chatbot responds to the user's questions about cybersecurity and the common cyber threats such as phishing, safe browsing, malware, man-in-the-middle attacks and more.
 
 - Typing Effect: The chatbot provides a typing effect to enhance user experience (making the chatbot more human-like), improves readability by preventing information overload and it also builds anticipation for the users.
+  
+- Newly Added Feature: Sentiment Detection:The chatbot now detects user emotions like worry, curiosity, frustration, or positivity based on keywords in the conversation. It adjusts its tone to respond more empathetically or supportively.
+
+- Newly Added Feature: Keyword-Based Cybersecurity Tips: The bot includes a dictionary of common cybersecurity topics with multiple randomized educational responses for Password, Scam, Privacy and Phishing. 
+Each topic is recognized via keyword matching, and a different tip is selected randomly for each interaction to keep the conversation dynamic.
+
+- Newly Added Feature: Memory Recall System: The chatbot remembers past user interests during the session.
+Users can ask: "What do you remember?" and CyberBot will list the topics they’ve shown interest in, and these interests are stored in a file (MemoryRecallFile.txt) to simulate persistent memory.
 
 - Exit Functionality: The user can end the chat by typing "exit".
 
@@ -62,7 +70,8 @@ ChatBot: I'm glad to hear that!
 5. Response Handler Class- This class handles the responses by firstly loading the responses on a text file and finding the best response for the user, allowing for an excellent user experience.
 6. LoadPredefinedResponses Method- method that loads predefined responses from the Predefined_Responses.txt file
 7. Chatbot Interaction Class- This class is responsible for managing how users can interact with the chatbot.
-8. TypingEffect Method- simulates a typing effect when the chatbot sends a response back to the user.  
+8. TypingEffect Method- simulates a typing effect when the chatbot sends a response back to the user.
+9. Newly Added Text File- called MemoryRecallFile.txt and it stores user-entered messages and interests.
 
 
 **********************************************************************************************************************************************
@@ -77,6 +86,16 @@ ChatBot: I'm glad to hear that Brynnah!
 ChatBot: So, how may I be of assistance to you Brynnah?
 Brynnah: I would like to ask about phishing
 ChatBot: Phishing involves tricking people into revealing information such as passwords, usernames, or credit card numbers by pretending to be a trusted entity.
+ChatBot: Keyword Dected: 'phishing'
+Cyberbot is randomising responses
+Cybersecurity Tip: Check for spelling errors or unusual formatting in emails - these are red flags.
+ChatBot: So, how may I be of assistance to you Brynnah?
+Brynnah: I am worried about scams
+ChatBot: I understand that may be concerning. Let me help you...
+         Dishonest or fradulent scheme that tries to trick people into giving money or something of value. 
+ChatBot: Keyword Dected: 'scams'
+Cyberbot is randomising responses
+Cybersecurity Tip: Be wary of offers that seem to good to be true - they usually are!
 ChatBot: So, how may I be of assistance to you Brynnah?
 Brynnah: exit
 ChatBot: Goodbye Brynnah!
