@@ -252,19 +252,57 @@ namespace ChatBot_Project
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine($"{chatBotName} is randomising responses...");
                         Console.ResetColor();
-                        Console.WriteLine($"Cybersecurity Tip: {GetRandomResponse(keyword)}");
+
+                        // Update memory with detected interest
+                        UpdateMemory(userInput);
+
+                        // Provide personalized response if user has shown interest before
+                        if (userInterests.Contains(keyword))
+                        {
+                            typingEffect($"As someone interested in {keyword}, here's another tip:", ConsoleColor.Yellow);
+                        }//end of if-statement
+
+                        typingEffect($"Cybersecurity Tip: {GetRandomResponse(keyword)}", ConsoleColor.Green);
                         foundKeyword = true;
                         break;
                     }//end of if statement
                 }//end of foreach loop
 
-                // If no known keyword, try recall
+                // If no known keyword, try response handler first, then recall
                 if (!foundKeyword)
                 {
-                    Console.WriteLine(RecallPreviousMessage(userInput));
+                    string response = responseHandler.GetResponse(userInput);
+                    if (!response.Contains("Sorry response not found"))
+                    {
+                        typingEffect($" {chatBotName}: {response}", ConsoleColor.DarkGray);
+                    }
+                    else
+                    {
+                        // Try recall if response handler fails
+                        string recallResponse = RecallPreviousMessage(userInput);
+                        typingEffect($" {chatBotName}: {recallResponse}", ConsoleColor.DarkGray);
+                    }
+                }//End of if statement
+
+                    }//end of while loop
+                }//end of beginChat method
+
+        // Detects sentiment from user input
+        private string DetectSentiment(string userInput)
+        {
+            string input = userInput.ToLower();
+            foreach (var sentimentCategory in sentiments)
+            {
+                foreach (var keyword in sentimentCategory.Value)
+                {
+                    if (input.Contains(keyword))
+                    {
+                        return sentimentCategory.Key;
+                    }
                 }
-            }//end of while loop
-        }//end of beginChat method
+            }
+            return null;
+        }//end of detect sentiment method
 
         // Attempts to recall previous similar messages from the conversation
         private string RecallPreviousMessage(string userInput)
