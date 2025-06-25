@@ -98,7 +98,7 @@ namespace ChatBot_Project
                 var responses = keywordResponses[topic];
                 return responses[random.Next(responses.Count)];
             }
-            return "I need to learn more about that topic. Could you ask something else?";
+            return "I need to learn more about that topic. Could you ask something else related to Cybersecurity?";
         }//end of method get random response
 
         // Main interaction loop of the chatbot
@@ -128,8 +128,8 @@ namespace ChatBot_Project
             while (string.IsNullOrEmpty(userName) || !Regex.IsMatch(userName, pattern))
             {
                 typingEffect($" {chatBotName}: Invalid! Your name must not contain any numbers or special characters.", ConsoleColor.Red);
-                Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 typingEffect($" {chatBotName}: What is your name? ", ConsoleColor.DarkGray);
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.Write("You: ");
                 userName = Console.ReadLine();
                 Console.ResetColor();
@@ -167,6 +167,13 @@ namespace ChatBot_Project
                 Console.Write(userName + ": ");
                 string userInput = Console.ReadLine();
                 Console.ResetColor();
+
+                // Error handling for empty input
+                if (string.IsNullOrWhiteSpace(userInput))
+                {
+                    typingEffect($" {chatBotName}: I didn't catch that. Could you please say something?", ConsoleColor.Red);
+                    continue;
+                }
 
                 // End chat on "exit"
                 if (userInput.ToLower() == "exit")
