@@ -23,17 +23,21 @@ namespace ChatBot_Project
             { "password", new List<string> {
                 "Strong passwords are your first line of defense! Use a mix of letters, numbers, and symbols.",
                 "I recommend using different passwords for each account to prevent widespread breaches.",
-                "Consider using a password manager to keep track of your complex passwords safely."
+                "Consider using a password manager to keep track of your complex passwords safely.",
+                "Make sure to use strong, unique passwords for each account. Avoid using personal details in your passwords."
             }},
             { "scam", new List<string> {
                 "Be wary of offers that seem too good to be true - they usually are!",
                 "Legitimate organizations won't ask for sensitive information via email or text.",
-                "When in doubt about a message, contact the company directly using their official website."
+                "When in doubt about a message, contact the company directly using their official website.",
+                "Scammers often create fake websites that look legitimate. Always verify URLs carefully."
+
             }},
             { "privacy", new List<string> {
                 "Regularly review privacy settings on your social media accounts.",
                 "Consider using a VPN when connecting to public Wi-Fi networks.",
-                "Be mindful of what personal information you share online - it can be difficult to remove."
+                "Be mindful of what personal information you share online - it can be difficult to remove.",
+                "Privacy is a crucial part of staying safe online. Always read privacy policies before sharing data."
             }},
             { "phishing", new List<string> {
                 "Phishing is a cyber-attack where hackers trick you into revealing personal info by pretending to be someone you trust.",
@@ -123,8 +127,9 @@ namespace ChatBot_Project
 
             while (string.IsNullOrEmpty(userName) || !Regex.IsMatch(userName, pattern))
             {
-                typingEffect($" {chatBotName}: Please enter your name! Your name must not contain any numbers or special characters.", ConsoleColor.Red);
+                typingEffect($" {chatBotName}: Invalid! Your name must not contain any numbers or special characters.", ConsoleColor.Red);
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                typingEffect($" {chatBotName}: What is your name? ", ConsoleColor.DarkGray);
                 Console.Write("You: ");
                 userName = Console.ReadLine();
                 Console.ResetColor();

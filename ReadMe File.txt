@@ -18,7 +18,16 @@ The purpose of this project is to educate users by providing basic cybersecurity
 
 - Typing Effect: The chatbot provides a typing effect to enhance user experience (making the chatbot more human-like), improves readability by preventing information overload and it also builds anticipation for the users.
 
+- Newly Added Feature: Sentiment Detection:The chatbot now detects user emotions like worry, curiosity, frustration, or positivity based on keywords in the conversation. It adjusts its tone to respond more empathetically or supportively.
+
+- Newly Added Feature: Keyword-Based Cybersecurity Tips: The bot includes a dictionary of common cybersecurity topics with multiple randomized educational responses for Password, Scam, Privacy and Phishing. 
+Each topic is recognized via keyword matching, and a different tip is selected randomly for each interaction to keep the conversation dynamic.
+
+- Newly Added Feature: Memory Recall System: The chatbot remembers past user interests during the session.
+Users can ask: "What do you remember?" and CyberBot will list the topics they’ve shown interest in, and these interests are stored in a file (MemoryRecallFile.txt) to simulate persistent memory.
+
 - Exit Functionality: The user can end the chat by typing "exit".
+
 
 **********************************************************************************************************************************************
 ## PRECONDITIONS
@@ -63,6 +72,7 @@ ChatBot: I'm glad to hear that!
 6. LoadPredefinedResponses Method- method that loads predefined responses from the Predefined_Responses.txt file
 7. Chatbot Interaction Class- This class is responsible for managing how users can interact with the chatbot.
 8. TypingEffect Method- simulates a typing effect when the chatbot sends a response back to the user.  
+9. Newly Added Text File- called MemoryRecallFile.txt and it stores user-entered messages and interests.
 
 
 **********************************************************************************************************************************************
