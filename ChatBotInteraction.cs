@@ -178,44 +178,39 @@ namespace ChatBot_Project
                 // End chat on "exit"
                 if (userInput.ToLower() == "exit")
                 {
-                    typingEffect($" {chatBotName}: Goodbye {userName}!", ConsoleColor.DarkGray);
+                    typingEffect($" {chatBotName}: Goodbye {userName}! Stay safe online!", ConsoleColor.DarkGray);
                     Console.WriteLine("-------------------------------------------------------------------------------------------------------------------- ");
                     break;
                 }//end of if statement
 
-                // Save the message to memory
-                conversationMemory.Add(userInput);
+                //Save the message to memory
+                conversationMemory.Add($"{userName}: {userInput}");
                 SaveMemory();
 
 
 
                 // Check for sentiment and adjust response
-                foreach (var sentimentCategory in sentiments)
+
+                string detectedSentiment = DetectSentiment(userInput);
+                if (!string.IsNullOrEmpty(detectedSentiment))
                 {
-                    foreach (var keyword in sentimentCategory.Value)
-                    {
-                        if (userInput.ToLower().Contains(keyword))
-                        {
-                            AdjustResponseForSentiment(sentimentCategory.Key);
-                            break;
-                        }//end of if statement
-                    }//end of foreach
-                }//end of foreach
+                    AdjustResponseForSentiment(detectedSentiment);
+                }
 
                 // Check if the user asks what the bot remembers
-                if (userInput.Contains("what do you remember"))
+                if (userInput.ToLower().Contains("what do you remember") || userInput.ToLower().Contains("do you remember"))
                 {
                     // Respond with remembered topics, if any, I used an if statement
                     if (userInterests.Count > 0)
                     {
-                        Console.WriteLine($"{chatBotName}: I remember you're interested in: {string.Join(", ", userInterests)}.");
+                        typingEffect($"{chatBotName}: I remember you're interested in: {string.Join(", ", userInterests)}.", ConsoleColor.DarkGray);
                     }
                     else
                     {
-                        Console.WriteLine($"{chatBotName}: I don't remember you mentioning any interests yet.");
+                        typingEffect($"{chatBotName}: I don't remember you mentioning any specific interests yet.", ConsoleColor.DarkGray);
                     }
                     continue;
-                }//end of if statement
+                }//end of if-else statement
 
                 // Generate response via response handler
                 string chatBotResponse = responseHandler.GetResponse(userInput);
@@ -232,10 +227,18 @@ namespace ChatBot_Project
                     if (!userInterests.Contains(interest))
                     {
                         userInterests.Add(interest);
-                        Console.WriteLine($"{chatBotName}: Got it! I'll remember that you're interested in {interest}.");
+                        typingEffect($"{chatBotName}: Great! I'll remember that you're interested in {interest}. It's a crucial part of staying safe online.", ConsoleColor.DarkGray);
+
+
+                        // Provide personalized follow-up based on interest
+                        if (keywordResponses.ContainsKey(interest))
+                        {
+                            typingEffect($"Cybersecurity Tip: {GetRandomResponse(interest)}", ConsoleColor.Green);
+
+                        }
                         continue;
-                    }//end of if statement
-                }//end of if statement
+                    }//end of if statement 2
+                }//end of if statement 1
 
 
                 // Check for keywords and give related tips
