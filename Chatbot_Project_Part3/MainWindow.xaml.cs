@@ -77,19 +77,104 @@ namespace Chatbot_Project_Part3
         public MainWindow()
         {
             InitializeComponent();
-            InitializeQuizQuestions();
+            InitializeQuizQuestions(); // Initialize quiz system!
+            InitializeNLPComponents(); // Initialize NLP system!
             AddToActivityLog("Cybersecurity Awareness Chatbot started");
             UpdateStatistics();
             ShowWelcomeMessage();
         }//end of MainWindow constructor
 
+        // NLP ENHANCEMENT: Initialize Natural Language Processing components
+        // This method sets up dictionaries to help understand user intent better
+        private void InitializeNLPComponents()
+        {
+
+            // Intent keywords - different ways users might express the same intent
+            intentKeywords = new Dictionary<string, List<string>>
+            {
+                ["add_task"] = new List<string>
+                {
+                    "add task", "create task", "new task", "make task", "set task",
+                    "add reminder", "create reminder", "remind me", "set reminder",
+                    "help me remember", "schedule", "plan", "organize", "todo",
+                    "i need to", "i should", "i want to", "can you remind"
+                },
+                ["show_tasks"] = new List<string>
+                {
+                    "show tasks", "view tasks", "list tasks", "my tasks", "see tasks",
+                    "what tasks", "task list", "display tasks", "current tasks",
+                    "show my list", "what do i need to do", "whats on my list"
+                },
+                ["start_quiz"] = new List<string>
+                {
+                    "start quiz", "take quiz", "quiz me", "begin quiz", "test me",
+                    "challenge me", "game", "play", "questions", "test knowledge",
+                    "mini-game", "cybersecurity test", "security quiz"
+                },
+                ["help"] = new List<string>
+                {
+                    "help", "commands", "what can you do", "how to use", "instructions",
+                    "guide me", "assist", "support", "tutorial", "show me"
+                },
+                ["activity_log"] = new List<string>
+                {
+                    "activity log", "what have you done", "show log", "recent actions",
+                    "history", "summary", "what happened", "actions taken", "log history"
+                }
+            };
+
+            // Synonym dictionary for cybersecurity terms
+            synonymDictionary = new Dictionary<string, List<string>>
+            {
+                ["password"] = new List<string> { "password", "passphrase", "login", "credentials", "pass" },
+                ["two-factor"] = new List<string> { "2fa", "two-factor", "two factor", "mfa", "multi-factor" },
+                ["phishing"] = new List<string> { "phishing", "scam", "fake email", "suspicious email", "fraud" },
+                ["backup"] = new List<string> { "backup", "back up", "save", "copy", "archive" },
+                ["antivirus"] = new List<string> { "antivirus", "anti-virus", "virus protection", "security software" },
+                ["firewall"] = new List<string> { "firewall", "fire wall", "network protection", "security barrier" },
+                ["update"] = new List<string> { "update", "upgrade", "patch", "install", "refresh" }
+            };
+
+            // Common typos dictionary and their corrections (fun feature!)
+            commonTypos = new Dictionary<string, string>
+            {
+                ["taks"] = "task",
+                ["psasword"] = "password",
+                ["phising"] = "phishing",
+                ["secruity"] = "security",
+                ["updat"] = "update",
+                ["quizz"] = "quiz",
+                ["helpp"] = "help",
+                ["shoow"] = "show"
+            };
+
+            // Conversational phrases for more natural interactions
+            conversationalPhrases = new List<string>
+            {
+                "I understand you want to",
+                "Let me help you with that!",
+                "Great idea! I can assist with",
+                "Perfect! Let's work on",
+                "Absolutely! I'll help you",
+                "Smart thinking! Let me"
+            };
+
+            AddToActivityLog("NLP System initialized with advanced understanding capabilities");
+        }//end of InitializeNLPComponents method
+
 
         //A method to show a fun welcome message
         private void ShowWelcomeMessage()
         {
-            AddChatbotResponse("Welcome to the South African Awareness CyberSecurity Awareness Chatbot! I'm here to help you stay safe online! 🛡️ ");
-            AddChatbotResponse("✨ Try saying: 'add task', 'show tasks', 'help', or ask me about cybersecurity! ✨");
-        }
+            AddChatbotResponse(" Welcome to the South African Awareness CyberSecurity Awareness Chatbot! I'm here to help you stay safe online! 🛡️ ");
+            AddChatbotResponse(" Try saying things like:");
+            AddChatbotResponse("   • 'Add task'");
+            AddChatbotResponse("   • 'Show tasks'");
+            AddChatbotResponse("   • 'Can you remind me to update my password?'");
+            AddChatbotResponse("   • 'I need to enable 2FA tomorrow'");
+            AddChatbotResponse("   • 'What have you been doing for me?'");
+            AddChatbotResponse(" Type 'help' for commands or just ask me about cybersecurity! ✨");  
+        }//end of show welcome message
 
         // Initialize quiz questions
         private void InitializeQuizQuestions()
@@ -212,7 +297,7 @@ namespace Chatbot_Project_Part3
             else if (securityScore >= 40)
                 status_text.Text = "⚠️ Needs Work";
             else if (totalTasks > 0)
-                status_text.Text = "🚨 Security Risk!";
+                status_text.Text = "🆘 Security Risk!";
             else
                 status_text.Text = "I am ready to help!";
 
@@ -224,8 +309,8 @@ namespace Chatbot_Project_Part3
             string timestamp = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
             activityLog.Add($"{timestamp}: {action}");
 
-            // Keep only last 10 entries
-            if (activityLog.Count > 10)
+            // Keep only last 15 entries
+            if (activityLog.Count > 15)
             {
                 activityLog.RemoveAt(0);
             }//end of if statement
@@ -256,7 +341,7 @@ namespace Chatbot_Project_Part3
                     // Add chatbot response
                     string response = task.IsCompleted ?
                         $"Amazing work! Task '{task.Title}' has been marked as completed. Keep up the good cybersecurity practices!" :
-                        $"Task '{task.Title}' has been marked as pending again.";
+                        $"Task '{task.Title}' has been marked as pending again. No worries, you've got this!";
 
                     AddChatbotResponse(response);
                 }//end of inner if statement
@@ -293,7 +378,7 @@ namespace Chatbot_Project_Part3
             {
                 show_chats.ScrollIntoView(show_chats.Items[show_chats.Items.Count - 1]);
             }
-        }
+        }//end of RefreshTaskDisplay method
 
         //A method to add chatbot responses
         private void AddChatbotResponse(string response)
@@ -302,16 +387,16 @@ namespace Chatbot_Project_Part3
             string timestamp = now.ToString("yyyy-MM-dd HH:mm");
             show_chats.Items.Add($"Chatbot [{timestamp}]: {response}");
             show_chats.ScrollIntoView(show_chats.Items[show_chats.Items.Count - 1]);
-        }
+        }//end of AddChatbotResponse method
 
         // Method to add user messages
         private void AddUserMessage(string message)
         {
             DateTime now = DateTime.Now;
             string timestamp = now.ToString("yyyy-MM-dd HH:mm");
-            show_chats.Items.Add($"User [{timestamp}]: {message}");
+            show_chats.Items.Add($" 👤 User [{timestamp}]: {message}");
             show_chats.ScrollIntoView(show_chats.Items[show_chats.Items.Count - 1]);
-        }
+        }//end of AddUserMessage method
 
         //A method for when the user asks a question or gives a command
         private void ask_question(object sender, RoutedEventArgs e)
@@ -332,9 +417,9 @@ namespace Chatbot_Project_Part3
 
             // Process the user input
             ProcessUserInput(userInput);
-        }
+        }//end of ask_question method
 
-        // Main method to process user input and determine intent
+        // Main method to process user input with advanced natural language understanding
         private void ProcessUserInput(string input)
         {
             string lowerInput = input.ToLower();
@@ -386,6 +471,8 @@ namespace Chatbot_Project_Part3
                 HandleGeneralQuery(input);
             }
         }//end of process user input method
+
+
 
         // A method to handle adding new tasks
         private void HandleAddTask(string input)
@@ -799,7 +886,44 @@ namespace Chatbot_Project_Part3
             }
 
             AddToActivityLog($"Responded to query about: {input}");
-        }
+        }//end of handle general query method
+
+        // Enhanced NLP method to better understand user intent through keyword detection and pattern matching
+        private string DetectUserIntent(string input)
+        {
+            string lowerInput = input.ToLower();
+
+            // Task-related intent detection with natural language variations
+            if (ContainsTaskKeywords(lowerInput))
+            {
+                if (ContainsReminderKeywords(lowerInput))
+                    return "ADD_TASK_WITH_REMINDER";
+                else
+                    return "ADD_TASK";
+            }
+
+            // Quiz-related intent detection
+            if (ContainsQuizKeywords(lowerInput))
+                return "START_QUIZ";
+
+            // Task viewing intent detection
+            if (ContainsViewTaskKeywords(lowerInput))
+                return "VIEW_TASKS";
+
+            // Activity/summary intent detection
+            if (ContainsSummaryKeywords(lowerInput))
+                return "SHOW_SUMMARY";
+
+            // Help intent detection
+            if (ContainsHelpKeywords(lowerInput))
+                return "HELP";
+
+            // Cybersecurity topic detection
+            if (ContainsCyberSecurityKeywords(lowerInput))
+                return "CYBERSECURITY_QUERY";
+
+            return "GENERAL_QUERY";
+        }//end of detect user intent method
 
         // Handle Enter key press in text box
         private void user_question_KeyDown(object sender, KeyEventArgs e)
