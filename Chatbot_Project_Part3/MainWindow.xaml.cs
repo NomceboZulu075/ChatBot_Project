@@ -44,6 +44,24 @@ namespace Chatbot_Project_Part3
         // Activity log for tracking actions
         private List<string> activityLog = new List<string>();
 
+        // Quiz System Variables
+        public class QuizQuestion
+        {
+            public string Question { get; set; }
+            public List<string> Options { get; set; }
+            public int CorrectAnswer { get; set; }
+            public string Explanation { get; set; }
+            public bool IsTrueFalse { get; set; }
+        }//end of quizquestion class
+
+        private List<QuizQuestion> quizQuestions = new List<QuizQuestion>();
+        private int currentQuestionIndex = 0;
+        private int quizScore = 0;
+        private bool isQuizActive = false;
+        private int totalQuizzesTaken = 0;
+        private int bestScore = 0;
+
+
         public MainWindow()
         {
             InitializeComponent();
