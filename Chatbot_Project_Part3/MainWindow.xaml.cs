@@ -235,8 +235,158 @@ namespace Chatbot_Project_Part3
                 // Handle general cybersecurity questions or provide default response
                 HandleGeneralQuery(input);
             }
+        }//end of process user input method
+
+        // A method to handle adding new tasks
+        private void HandleAddTask(string input)
+        {
+            // Simple task extraction - in a real NLP system, this would be more sophisticated
+            string taskTitle = ExtractTaskTitle(input);
+            string taskDescription = GenerateTaskDescription(taskTitle);
+
+            // Create new task
+            var newTask = new taskInformation
+            {
+                Title = taskTitle,
+                Description = taskDescription,
+                IsCompleted = false,
+                CreatedDate = DateTime.Now
+            };
+
+            // Check if user wants a reminder
+            DateTime? reminderDate = ExtractReminderDate(input);
+            if (reminderDate.HasValue)
+            {
+                newTask.ReminderDate = reminderDate;
+            }
+
+            // Add task to the list
+            cyberTasks.Add(newTask);
+            AddToActivityLog($"Task added: '{taskTitle}'");
+
+            // Refreshing display and update statistics
+            RefreshTaskDisplay();
+
+            // Provide response with emojis
+            string response = $"✅ Task added: '{taskTitle}' - {taskDescription}";
+            if (reminderDate.HasValue)
+            {
+                response += $" ⏰ I'll remind you on {reminderDate.Value:MM/dd/yyyy}.";
+            }
+            else
+            {
+                response += " Would you like to set a reminder for this task?";
+            }
+
+            AddChatbotResponse(response);
+
+            // Fun encouragement based on task count
+            if (cyberTasks.Count == 1)
+                AddChatbotResponse(" Great start! Your first cybersecurity task is logged!");
+            else if (cyberTasks.Count == 5)
+                AddChatbotResponse(" You're on fire! 🔥 5 tasks and counting - security champion!");
+
+        }//end of method handle add task
+
+        // Extract task title from user input
+        private string ExtractTaskTitle(string input)
+        {
+            // Simple extraction - look for common cybersecurity tasks
+            string lowerInput = input.ToLower();
+
+            if (lowerInput.Contains("two-factor") || lowerInput.Contains("2fa"))
+                return "Enable Two-Factor Authentication";
+            else if (lowerInput.Contains("password"))
+                return "Update Password";
+            else if (lowerInput.Contains("privacy"))
+                return "Review Privacy Settings";
+            else if (lowerInput.Contains("backup"))
+                return "Create Data Backup";
+            else if (lowerInput.Contains("antivirus"))
+                return "Update Antivirus Software";
+            else if (lowerInput.Contains("firewall"))
+                return "Check Firewall Settings";
+            else if (lowerInput.Contains("software update"))
+                return "Install Software Updates";
+
+            else
+            {
+                // Try to extract from the input after "add task"
+                string[] parts = input.Split(new string[] { "add task", "create task", "new task" },
+                    StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length > 1)
+                {
+                    return parts[1].Trim();
+                }
+                return "General Cybersecurity Task";
+            }//end of else statement
+        }//end of extract task title method
+
+        // Generate appropriate descriptions for each task
+        private string GenerateTaskDescription(string title)
+        {
+            switch (title.ToLower())
+            {
+                case "enable two-factor authentication":
+                    return "Set up 2FA on your important accounts to add an extra layer of security";
+                case "update password":
+                    return "Change your password to a strong, unique combination of special characteres, numbers and letters";
+                case "review privacy settings":
+                    return "Check and update privacy settings on your social media and online accounts";
+                case "create data backup":
+                    return "Backup important files to prevent data loss";
+                case "update antivirus software":
+                    return "Ensure your antivirus software is up to date at all times";
+                case "check firewall settings":
+                    return "Verify your firewall is properly configured";
+                case "install software updates":
+                    return "Install the latest security updates for your software";
+                default:
+                    return "Complete this cybersecurity task to improve your digital safety";
+            }//end of switch case
+        }//end of generate task description
+
+        // Extract reminder date from user input
+        private DateTime? ExtractReminderDate(string input)
+        {
+            string lowerInput = input.ToLower();
+
+            if (lowerInput.Contains("tomorrow"))
+                return DateTime.Now.AddDays(1);
+            else if (lowerInput.Contains("next week"))
+                return DateTime.Now.AddDays(7);
+            else if (lowerInput.Contains("3 days"))
+                return DateTime.Now.AddDays(3);
+            else if (lowerInput.Contains("5 days"))
+                return DateTime.Now.AddDays(5);
+            else if (lowerInput.Contains("1 week"))
+                return DateTime.Now.AddDays(7);
+            else if (lowerInput.Contains("2 weeks"))
+                return DateTime.Now.AddDays(14);
+
+            return null;
+        }//end of extract reminder date method
+
+        // A method to handle showing all the tasks
+        private void HandleShowTasks()
+        {
+            if (cyberTasks.Count == 0)
+            {
+                AddChatbotResponse("You don't have any tasks yet. Would you like to add a cybersecurity task?");
+                return;
+            }
+
+            string response = "Here are your cybersecurity tasks:\n";
+            for (int i = 0; i < cyberTasks.Count; i++)
+            {
+                var task = cyberTasks[i];
+                string status = task.IsCompleted ? "✓ Completed" : "○ Pending";
+                string reminder = task.ReminderDate.HasValue ? $" (Reminder: {task.ReminderDate.Value:MM/dd/yyyy})" : "";
+                response += $"{i + 1}. {status} - {task.Title}{reminder}\n";
+            }
+
+            AddChatbotResponse(response);
         }
-}
 
 
 
