@@ -725,6 +725,17 @@ namespace Chatbot_Project_Part3
         // Handle quiz answers
         private void HandleQuizAnswer(string input)
         {
+            // Check if user wants to quit the quiz
+            string lowerInput = input.ToLower().Trim();
+            if (lowerInput.Contains("quit quiz") || lowerInput.Contains("stop quiz") ||
+                lowerInput.Contains("end quiz") || lowerInput.Contains("exit quiz"))
+            {
+                isQuizActive = false;
+                AddChatbotResponse("🚪 Quiz ended! You can start a new quiz anytime by typing 'start quiz'.");
+                AddToActivityLog("Quiz ended by user request");
+                return;
+            }
+
             var question = quizQuestions[currentQuestionIndex];
             int userAnswer = -1;
 
@@ -909,6 +920,12 @@ namespace Chatbot_Project_Part3
         {
             string lowerInput = input.ToLower();
 
+            // Check for quit quiz first (before other quiz-related intents)
+            if (lowerInput.Contains("quit quiz") || lowerInput.Contains("stop quiz") ||
+                lowerInput.Contains("exit quiz") || lowerInput.Contains("end quiz") ||
+                lowerInput.Contains("cancel quiz") || lowerInput.Contains("abort quiz"))
+                return "QUIT_QUIZ"; ;
+
             // Task-related intent detection with natural language variations
             if (ContainsTaskKeywords(lowerInput))
             {
@@ -933,9 +950,6 @@ namespace Chatbot_Project_Part3
             // Help intent detection
             if (ContainsHelpKeywords(lowerInput))
                 return "HELP";
-
-            if (lowerInput.Contains("quit quiz") || lowerInput.Contains("stop quiz") || lowerInput.Contains("exit quiz"))
-                return "QUIT_QUIZ";
 
             // Cybersecurity topic detection
             if (ContainsCyberSecurityKeywords(lowerInput))
