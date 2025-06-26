@@ -431,49 +431,16 @@ namespace Chatbot_Project_Part3
                 return;
             }
 
-            // Check for task-related commands
-            if (lowerInput.Contains("add task") || lowerInput.Contains("create task") ||
-                lowerInput.Contains("new task") || lowerInput.Contains("add reminder"))
-            {
-                HandleAddTask(input);
-            }
-            else if (lowerInput.Contains("show tasks") || lowerInput.Contains("view tasks") ||
-                     lowerInput.Contains("list tasks") || lowerInput.Contains("my tasks"))
-            {
-                HandleShowTasks();
-            }
-            else if (lowerInput.Contains("delete task") || lowerInput.Contains("remove task"))
-            {
-                HandleDeleteTask(input);
-            }
-            else if (lowerInput.Contains("start quiz") || lowerInput.Contains("take quiz") ||
-                     lowerInput.Contains("quiz me") || lowerInput.Contains("begin quiz"))
-            {
-                StartQuiz();
-            }
-            else if (lowerInput.Contains("quiz stats") || lowerInput.Contains("quiz score") ||
-                     lowerInput.Contains("my score"))
-            {
-                ShowQuizStatistics();
-            }
-            else if (lowerInput.Contains("activity log") || lowerInput.Contains("what have you done") ||
-                     lowerInput.Contains("show log") || lowerInput.Contains("recent actions"))
-            {
-                HandleShowActivityLog();
-            }
-            else if (lowerInput.Contains("help") || lowerInput.Contains("commands"))
-            {
-                HandleHelp();
-            }
-            else
-            {
-                // Handle general cybersecurity questions or provide default response
-                HandleGeneralQuery(input);
-            }
+            // Use NLP to detect user intent
+            string detectedIntent = DetectUserIntent(input);
+
+            // Handle the detected intent with natural language understanding
+            HandleNaturalLanguageResponse(detectedIntent, input);
+
+            // Increment NLP interaction count for tracking
+            nlpInteractionCount++;
         }//end of process user input method
-
-
-
+            
         // A method to handle adding new tasks
         private void HandleAddTask(string input)
         {
@@ -617,19 +584,49 @@ namespace Chatbot_Project_Part3
             for (int i = 0; i < cyberTasks.Count; i++)
             {
                 var task = cyberTasks[i];
-                string status = task.IsCompleted ? "✓ Completed" : "○ Pending";
+                string status = task.IsCompleted ? "✅ Completed" : "⏳ Pending";
                 string reminder = task.ReminderDate.HasValue ? $" (Reminder: {task.ReminderDate.Value:MM/dd/yyyy})" : "";
-                response += $"{i + 1}. {status} - {task.Title}{reminder}\n";
+                string taskDisplay = $"{i + 1}. {status} {task.Title} - {task.Description}{reminder}";
+                AddChatbotResponse(taskDisplay);
             }
 
-            AddChatbotResponse(response);
-        }
+            AddChatbotResponse(("💡 Tip: Double-click on any task above to mark it complete/incomplete!"));
+        }//end of handle show tasks method
 
         // A method to handle deleting tasks
         private void HandleDeleteTask(string input)
         {
-            //User will double click on the task they wishto delete
-            AddChatbotResponse("To delete a task, please double-click on a completed task in the list above.");
+            if (cyberTasks.Count == 0)
+            {
+                AddChatbotResponse("No tasks available to delete!");
+                return;
+            }
+
+            // Try to extract task number or title from input
+            string lowerInput = input.ToLower();
+
+            // Look for patterns like "delete task 1" or "remove task 2"
+            var match = Regex.Match(lowerInput, @"(?:delete|remove)\s+task\s+(\d+)");
+            if (match.Success)
+            {
+                int taskNumber = int.Parse(match.Groups[1].Value);
+                if (taskNumber >= 1 && taskNumber <= cyberTasks.Count)
+                {
+                    var taskToDelete = cyberTasks[taskNumber - 1];
+                    cyberTasks.RemoveAt(taskNumber - 1);
+                    AddToActivityLog($"Task deleted: '{taskToDelete.Title}'");
+                    RefreshTaskDisplay();
+                    AddChatbotResponse($"✅ Task '{taskToDelete.Title}' has been deleted!");
+                    return;
+                }
+            }
+
+            // If no specific task number, show instructions
+            AddChatbotResponse("To delete a task:");
+            AddChatbotResponse("• Type 'delete task [number]' (e.g., 'delete task 1')");
+            AddChatbotResponse("• Or double-click on a completed task in the list above to toggle it");
+            HandleShowTasks(); // Show current tasks with numbers
+        
         }//end of handle delete task method 
 
         // Handle showing activity log
@@ -856,6 +853,24 @@ namespace Chatbot_Project_Part3
 
             AddChatbotResponse(stats);
         }//end of mehod show quiz statistics
+
+        // A method to handle quitting quiz
+
+        private void HandleQuitQuiz()
+        {
+            if (!isQuizActive)
+            {
+                AddChatbotResponse("No quiz is currently active.");
+                return;
+            }
+
+            isQuizActive = false;
+            currentQuestionIndex = 0;
+            quizScore = 0;
+
+            AddChatbotResponse("❌ Quiz cancelled. Type 'start quiz' when you're ready to try again!");
+            AddToActivityLog("Quiz cancelled by user");
+        }
 
 
 
@@ -1084,8 +1099,138 @@ namespace Chatbot_Project_Part3
         return null;
         }//end of extract time from NLP method
 
-    // Handle Enter key press in text box
-    private void user_question_KeyDown(object sender, KeyEventArgs e)
+        // Enhanced method to provide more natural responses based on detected intent
+        private void HandleNaturalLanguageResponse(string intent, string originalInput)
+        {
+            nlpInteractionCount++; // Track NLP usage 
+
+            switch (intent)
+            {
+                case "ADD_TASK":
+                    HandleNaturalTaskAddition(originalInput, false);
+                    break;
+                case "ADD_TASK_WITH_REMINDER":
+                    HandleNaturalTaskAddition(originalInput, true);
+                    break;
+                case "START_QUIZ":
+                    AddChatbotResponse("I understand you'd like to test your knowledge! Starting the cybersecurity quiz now...");
+                    StartQuiz();
+                    break;
+                case "VIEW_TASKS":
+                    AddChatbotResponse("Let me show you what's on your cybersecurity task list:");
+                    HandleShowTasks();
+                    break;
+                case "SHOW_SUMMARY":
+                    AddChatbotResponse("Here's a summary of what we've accomplished together:");
+                    HandleShowActivityLog();
+                    break;
+                case "HELP":
+                    AddChatbotResponse("I'd be happy to help! Here's what I can do for you:");
+                    HandleHelp();
+                    break;
+                case "CYBERSECURITY_QUERY":
+                    HandleCyberSecurityEducation(originalInput);
+                    break;
+                default:
+                    HandleGeneralQuery(originalInput);
+                    break;
+            }
+        }//end of handle natural language response method
+
+        // Enhanced method to handle natural task addition with improved understanding
+        private void HandleNaturalTaskAddition(string input, bool includeReminder)
+        {
+            string taskTitle = ExtractTaskFromNaturalLanguage(input);
+            string taskDescription = GenerateTaskDescription(taskTitle);
+
+            var newTask = new taskInformation
+            {
+                Title = taskTitle,
+                Description = taskDescription,
+                IsCompleted = false,
+                CreatedDate = DateTime.Now
+            };
+
+            // Handle reminder extraction if needed
+            if (includeReminder)
+            {
+                DateTime? reminderDate = ExtractTimeFromNaturalLanguage(input);
+                if (reminderDate.HasValue)
+                {
+                    newTask.ReminderDate = reminderDate;
+                }
+            }
+
+            cyberTasks.Add(newTask);
+            AddToActivityLog($"Task added via natural language: '{taskTitle}'");
+            RefreshTaskDisplay();
+
+            // Provide natural language response
+            string response = $"✅ I've added the task '{taskTitle}' to your cybersecurity checklist!";
+            if (newTask.ReminderDate.HasValue)
+            {
+                response += $" ⏰ I'll remind you about this on {newTask.ReminderDate.Value:MM/dd/yyyy}.";
+            }
+            else if (includeReminder)
+            {
+                response += " Would you like me to set a reminder for this task?";
+            }
+
+            AddChatbotResponse(response);
+
+            // Add encouraging natural language responses
+            string[] encouragements = {
+        "Great choice for staying secure! 🛡️",
+        "You're taking great steps towards better cybersecurity! 💪",
+        "Smart thinking! This will help keep you safe online! 🌟",
+        "Excellent cybersecurity habit! Keep it up! 🚀"
+            };
+
+            var random = new Random();
+            AddChatbotResponse(encouragements[random.Next(encouragements.Length)]);
+            }//end of handle natural task addition
+
+        // Enhanced method to handle cybersecurity education with better topic recognition
+        private void HandleCyberSecurityEducation(string input)
+        {
+            string lowerInput = input.ToLower();
+
+            if (lowerInput.Contains("phishing") || lowerInput.Contains("scam") || lowerInput.Contains("fake email"))
+            {
+                AddChatbotResponse(" Phishing attacks are like digital fishing - criminals cast out fake emails hoping someone will 'bite'!");
+                AddChatbotResponse("🛡️ Protection tips: Always verify sender identity, check URLs carefully, and never share personal info via email!");
+            }
+            else if (lowerInput.Contains("password") || lowerInput.Contains("passwords"))
+            {
+                AddChatbotResponse(" Strong passwords are your first line of defense!");
+                AddChatbotResponse("🔐 Best practices: Use 12+ characters, mix letters/numbers/symbols, and never reuse passwords across sites!");
+            }
+            else if (lowerInput.Contains("malware") || lowerInput.Contains("virus") || lowerInput.Contains("trojan"))
+            {
+                AddChatbotResponse(" Malware is malicious software designed to harm or spy on your system!");
+                AddChatbotResponse("🛡️ Stay protected: Keep antivirus updated, avoid suspicious downloads, and scan regularly!");
+            }
+            else if (lowerInput.Contains("2fa") || lowerInput.Contains("two-factor") || lowerInput.Contains("authentication"))
+            {
+                AddChatbotResponse(" Two-Factor Authentication adds an extra security layer beyond just passwords!");
+                AddChatbotResponse("🔐 It's like having two locks on your door - much safer than just one!");
+            }
+            else if (lowerInput.Contains("social engineering"))
+            {
+                AddChatbotResponse(" Social engineering manipulates human psychology rather than technology!");
+                AddChatbotResponse("🧠 Defense: Be skeptical of unsolicited requests, verify identities, and trust your instincts!");
+            }
+            else
+            {
+                AddChatbotResponse("I'm here to help with cybersecurity topics! Feel free to ask about passwords, phishing, malware, or any other security concerns.");
+                AddChatbotResponse("💡 You can also say things like 'remind me to update my password' or 'add a task to check my privacy settings'!");
+            }
+
+            AddToActivityLog($"Provided cybersecurity education on: {input}");
+        }//end of handle cybersecurity education method
+
+        // Handle Enter key press in text box
+        private void user_question_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
