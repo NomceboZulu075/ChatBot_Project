@@ -725,6 +725,35 @@ namespace Chatbot_Project_Part3
         }//end of end quiz method
 
 
+        // Show quiz statistics
+        private void ShowQuizStatistics()
+        {
+            if (totalQuizzesTaken == 0)
+            {
+                AddChatbotResponse(" No quizzes taken yet! Type 'start quiz' to begin! ");
+                return;
+            }
+
+            string stats = $"🏆 Your Quiz Statistics:\n";
+            stats += $"📝 Total Quizzes Taken: {totalQuizzesTaken}\n";
+            stats += $"🥇 Best Score: {bestScore}%\n";
+
+            // Adding achievement badges - fun feature
+            if (bestScore >= 90)
+                stats += "🏅 Achievement: Cybersecurity Expert!\n";
+            else if (bestScore >= 80)
+                stats += "🥈 Achievement: Security Specialist!\n";
+            else if (bestScore >= 70)
+                stats += "🥉 Achievement: Safety Student!\n";
+
+            if (totalQuizzesTaken >= 5)
+                stats += " Achievement: Quiz Master!\n";
+
+            stats += "\n Keep practicing to improve your cybersecurity knowledge! 💡";
+
+            AddChatbotResponse(stats);
+        }//end of mehod show quiz statistics
+
 
 
         // A method to handle general cybersecurity queries
@@ -768,8 +797,13 @@ namespace Chatbot_Project_Part3
         // Handle quiz button click 
         private void start_quiz(object sender, RoutedEventArgs e)
         {
-            AddChatbotResponse("Quiz feature coming soon! For now, try asking me cybersecurity questions!");
-            AddChatbotResponse("Example: 'What is phishing?' or 'How to create strong passwords?'");
+            if (isQuizActive)
+            {
+                AddChatbotResponse(" Quiz is already in progress! Answer the current question or type 'quit quiz' to stop.");
+                return;
+            }
+
+            StartQuiz();
         }
     }
 }
