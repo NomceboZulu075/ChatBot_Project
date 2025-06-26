@@ -259,7 +259,7 @@ namespace ChatBot_Project
                         // Provide personalized response if user has shown interest before
                         if (userInterests.Contains(keyword))
                         {
-                            typingEffect($"As someone interested in {keyword}, here's another tip:", ConsoleColor.Yellow);
+                            typingEffect($"As someone interested in {keyword}, here's a tip:", ConsoleColor.Yellow);
                         }//end of if-statement
 
                         typingEffect($"Cybersecurity Tip: {GetRandomResponse(keyword)}", ConsoleColor.Green);

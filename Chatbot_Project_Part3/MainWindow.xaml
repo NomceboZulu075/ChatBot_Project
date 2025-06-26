@@ -1,0 +1,114 @@
+﻿<Window x:Class="Chatbot_Project_Part3.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Chatbot_Project_Part3"
+        mc:Ignorable="d"
+        Title="Cybersecurity Awareness Chatbot 🛡️" Height="600" Width="800"  
+        WindowStartupLocation="CenterScreen">
+
+
+    <Window.Background>
+        <LinearGradientBrush>
+            <GradientStop Color="#FF1a1a2e" Offset="0"/>
+            <GradientStop Color="#FF16213e" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Background>
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Fun Header Section -->
+        <Border Grid.Row="0" Background="#FF0f3460" Margin="5" CornerRadius="10" Padding="10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="🛡️" FontSize="24" Margin="0,0,10,0"/>
+                <TextBlock Text="CyberBot Status: " FontSize="16" Foreground="White" FontWeight="Bold"/>
+                <TextBlock x:Name="status_text" Text="Ready to help you spot cybersecurity threats!" FontSize="16" Foreground="#FF00ff88"/>
+                <TextBlock Text=" 🛡️" FontSize="24" Margin="10,0,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Chat/Task Display Area -->
+        <Border Grid.Row="1" Background="#FF1e1e2e" Margin="5" CornerRadius="8" BorderBrush="#FF6366f1" BorderThickness="2">
+            <ListView x:Name="show_chats" 
+                      Background="Transparent"
+                      Foreground="White"
+                      BorderThickness="0"
+                      Margin="5"
+                      MouseDoubleClick="show_chats_MouseDoubleClick"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+            </ListView>
+        </Border>
+
+        <!-- Statistics Section -->
+        <Border Grid.Row="2" Background="#FF0f3460" Margin="5" CornerRadius="8" Padding="8">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="Tasks Completed: " Foreground="White" FontWeight="Bold"/>
+                <TextBlock x:Name="completed_count" Text="0" Foreground="#FF00ff88" FontWeight="Bold"/>
+                <TextBlock Text=" | Total Tasks: " Foreground="White" FontWeight="Bold" Margin="20,0,0,0"/>
+                <TextBlock x:Name="total_count" Text="0" Foreground="#FF6366f1" FontWeight="Bold"/>
+                <TextBlock Text=" | Security Score: " Foreground="White" FontWeight="Bold" Margin="20,0,0,0"/>
+                <TextBlock x:Name="security_score" Text="0%" Foreground="#FFffa500" FontWeight="Bold"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Input Area -->
+        <Border Grid.Row="3" Background="#FF1e1e2e" Margin="5" CornerRadius="8" BorderBrush="#FF6366f1" BorderThickness="2">
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox x:Name="user_question" 
+                         Grid.Column="0"
+                         Height="35"
+                         Margin="0,0,10,0"
+                         KeyDown="user_question_KeyDown"
+                         VerticalContentAlignment="Center"
+                         Background="#FF2d2d44"
+                         Foreground="White"
+                         BorderBrush="#FF6366f1"
+                         BorderThickness="1"
+                         Padding="10,5"
+                         FontSize="14"/>
+
+                <Button x:Name="send_button"
+                        Grid.Column="1"
+                        Content="Send"
+                        Width="90"
+                        Height="35"
+                        Margin="0,0,10,0"
+                        Click="ask_question"
+                        Background="DarkSlateBlue"
+                        Foreground="White"
+                        BorderThickness="0"
+                        FontWeight="Bold"
+                        Cursor="Hand"/>
+
+                <Button x:Name="quiz_button"
+                        Grid.Column="2"
+                        Content="Quiz"
+                        Width="80"
+                        Height="35"
+                        Click="start_quiz"
+                        Background="Green" 
+                        Foreground="White"
+                        BorderThickness="0"
+                        FontWeight="Bold"
+                        Cursor="Hand"/>
+            </Grid>
+        </Border>
+
+
+
+    </Grid>
+</Window>
