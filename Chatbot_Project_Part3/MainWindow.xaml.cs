@@ -174,7 +174,7 @@ namespace Chatbot_Project_Part3
                     IsTrueFalse = true
                 }
             };
-        }
+        }//end of initialize quiz questions method
 
 
         //A method to update the fun statistics display
@@ -323,6 +323,13 @@ namespace Chatbot_Project_Part3
         {
             string lowerInput = input.ToLower();
 
+            // Check if we're in quiz mode
+            if (isQuizActive)
+            {
+                HandleQuizAnswer(input);
+                return;
+            }
+
             // Check for task-related commands
             if (lowerInput.Contains("add task") || lowerInput.Contains("create task") ||
                 lowerInput.Contains("new task") || lowerInput.Contains("add reminder"))
@@ -337,6 +344,16 @@ namespace Chatbot_Project_Part3
             else if (lowerInput.Contains("delete task") || lowerInput.Contains("remove task"))
             {
                 HandleDeleteTask(input);
+            }
+            else if (lowerInput.Contains("start quiz") || lowerInput.Contains("take quiz") ||
+                     lowerInput.Contains("quiz me") || lowerInput.Contains("begin quiz"))
+            {
+                StartQuiz();
+            }
+            else if (lowerInput.Contains("quiz stats") || lowerInput.Contains("quiz score") ||
+                     lowerInput.Contains("my score"))
+            {
+                ShowQuizStatistics();
             }
             else if (lowerInput.Contains("activity log") || lowerInput.Contains("what have you done") ||
                      lowerInput.Contains("show log") || lowerInput.Contains("recent actions"))
