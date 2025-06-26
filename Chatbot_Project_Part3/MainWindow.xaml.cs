@@ -427,6 +427,54 @@ namespace Chatbot_Project_Part3
         }//end of handle help method
 
 
+        // A method to handle general cybersecurity queries
+        private void HandleGeneralQuery(string input)
+        {
+            string lowerInput = input.ToLower();
+
+            if (lowerInput.Contains("phishing"))
+            {
+                AddChatbotResponse("Phishing is a cyber attack where criminals impersonate legitimate organizations to steal sensitive information. Always verify sender identity and never click suspicious links!");
+            }
+            else if (lowerInput.Contains("strong password"))
+            {
+                AddChatbotResponse("A strong password should be at least 12 characters long, include uppercase and lowercase letters, numbers, and symbols. Never reuse passwords across accounts!");
+            }
+            else if (lowerInput.Contains("malware"))
+            {
+                AddChatbotResponse("Malware is malicious software designed to harm your computer. Keep your antivirus updated, avoid suspicious downloads, and regularly scan your system!");
+            }
+            else if (lowerInput.Contains("social engineering"))
+            {
+                AddChatbotResponse("Social engineering involves manipulating people to divulge confidential information. Be cautious of unsolicited requests for personal information, even if they seem legitimate!");
+            }
+            else
+            {
+                AddChatbotResponse("I'm here to help with cybersecurity awareness! You can ask me about phishing, passwords, malware, or use commands like 'add task' or 'show tasks'. Type 'help' for more commands.");
+            }
+
+            AddToActivityLog($"Responded to query about: {input}");
+        }
+
+        // Handle Enter key press in text box
+        private void user_question_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ask_question(sender, new RoutedEventArgs());
+            }
+        }
+
+        // Handle quiz button click 
+        private void start_quiz(object sender, RoutedEventArgs e)
+        {
+            AddChatbotResponse("Quiz feature coming soon! For now, try asking me cybersecurity questions!");
+            AddChatbotResponse("Example: 'What is phishing?' or 'How to create strong passwords?'");
+        }
+    }
+}
+
+
 
 
 
