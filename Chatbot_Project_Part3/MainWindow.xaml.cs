@@ -327,7 +327,8 @@ namespace Chatbot_Project_Part3
             if (selectedItem.Contains("[PENDING]") || selectedItem.Contains("[COMPLETED]"))
             {
                 // Find the corresponding task
-                var task = cyberTasks.FirstOrDefault(t => selectedItem.Contains(t.Title));
+                var task = cyberTasks.FirstOrDefault(t => selectedItem.Equals(t.ToString()));
+
                 if (task != null)
                 {
                     // Toggle completion status
@@ -933,6 +934,9 @@ namespace Chatbot_Project_Part3
             if (ContainsHelpKeywords(lowerInput))
                 return "HELP";
 
+            if (lowerInput.Contains("quit quiz") || lowerInput.Contains("stop quiz") || lowerInput.Contains("exit quiz"))
+                return "QUIT_QUIZ";
+
             // Cybersecurity topic detection
             if (ContainsCyberSecurityKeywords(lowerInput))
                 return "CYBERSECURITY_QUERY";
@@ -1076,7 +1080,9 @@ namespace Chatbot_Project_Part3
         // Enhanced method to extract time expressions for reminders using NLP
         private DateTime? ExtractTimeFromNaturalLanguage(string input)
         {
-        string lowerInput = input.ToLower();
+            if (string.IsNullOrEmpty(input)) return null;
+
+            string lowerInput = input.ToLower();
 
         // Basic time expression recognition
         if (lowerInput.Contains("tomorrow"))
@@ -1127,6 +1133,9 @@ namespace Chatbot_Project_Part3
                 case "HELP":
                     AddChatbotResponse("I'd be happy to help! Here's what I can do for you:");
                     HandleHelp();
+                    break;
+                case "QUIT_QUIZ":
+                    HandleQuitQuiz();
                     break;
                 case "CYBERSECURITY_QUERY":
                     HandleCyberSecurityEducation(originalInput);
