@@ -162,7 +162,7 @@ namespace Chatbot_Project_Part3
             }
         }
 
-        // Method to add chatbot responses
+        //A method to add chatbot responses
         private void AddChatbotResponse(string response)
         {
             DateTime now = DateTime.Now;
@@ -170,6 +170,73 @@ namespace Chatbot_Project_Part3
             show_chats.Items.Add($"Chatbot [{timestamp}]: {response}");
             show_chats.ScrollIntoView(show_chats.Items[show_chats.Items.Count - 1]);
         }
+
+        // Method to add user messages
+        private void AddUserMessage(string message)
+        {
+            DateTime now = DateTime.Now;
+            string timestamp = now.ToString("yyyy-MM-dd HH:mm");
+            show_chats.Items.Add($"User [{timestamp}]: {message}");
+            show_chats.ScrollIntoView(show_chats.Items[show_chats.Items.Count - 1]);
+        }
+
+        //A method for when the user asks a question or gives a command
+        private void ask_question(object sender, RoutedEventArgs e)
+        {
+            string userInput = user_question.Text.Trim();
+
+            if (string.IsNullOrEmpty(userInput))
+            {
+                MessageBox.Show("Please enter a question or command!");
+                return;
+            }
+
+            // Add user message to chat
+            AddUserMessage(userInput);
+
+            // Clear input field
+            user_question.Text = "";
+
+            // Process the user input
+            ProcessUserInput(userInput);
+        }
+
+        // Main method to process user input and determine intent
+        private void ProcessUserInput(string input)
+        {
+            string lowerInput = input.ToLower();
+
+            // Check for task-related commands
+            if (lowerInput.Contains("add task") || lowerInput.Contains("create task") ||
+                lowerInput.Contains("new task") || lowerInput.Contains("add reminder"))
+            {
+                HandleAddTask(input);
+            }
+            else if (lowerInput.Contains("show tasks") || lowerInput.Contains("view tasks") ||
+                     lowerInput.Contains("list tasks") || lowerInput.Contains("my tasks"))
+            {
+                HandleShowTasks();
+            }
+            else if (lowerInput.Contains("delete task") || lowerInput.Contains("remove task"))
+            {
+                HandleDeleteTask(input);
+            }
+            else if (lowerInput.Contains("activity log") || lowerInput.Contains("what have you done") ||
+                     lowerInput.Contains("show log") || lowerInput.Contains("recent actions"))
+            {
+                HandleShowActivityLog();
+            }
+            else if (lowerInput.Contains("help") || lowerInput.Contains("commands"))
+            {
+                HandleHelp();
+            }
+            else
+            {
+                // Handle general cybersecurity questions or provide default response
+                HandleGeneralQuery(input);
+            }
+        }
+}
 
 
 
