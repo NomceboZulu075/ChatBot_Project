@@ -47,9 +47,11 @@ namespace Chatbot_Project_Part3
         public MainWindow()
         {
             InitializeComponent();
+            AddToActivityLog("Cybersecurity Awareness Chatbot started");
             UpdateStatistics();
             ShowWelcomeMessage();
-        }
+        }//end of MainWindow
+
 
         //A method to show a fun welcome message
         private void ShowWelcomeMessage()
@@ -61,7 +63,7 @@ namespace Chatbot_Project_Part3
         //A method to update the fun statistics display
         private void UpdateStatistics()
         {
-            int completedTasks = cyberTasks.Count(t => t.IsCompleted);
+            int completedTasks = cyberTasks.Count(i => i.IsCompleted);
             int totalTasks = cyberTasks.Count;
             int securityScore = totalTasks > 0 ? (completedTasks * 100) / totalTasks : 0;
 
@@ -93,15 +95,87 @@ namespace Chatbot_Project_Part3
             if (activityLog.Count > 10)
             {
                 activityLog.RemoveAt(0);
+            }//end of if statement
+        }//end of add activity log method
+
+        // When the task is double clicked on the list view
+        private void show_chats_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (show_chats.SelectedItem == null) return;
+
+            string selectedItem = show_chats.SelectedItem.ToString();
+
+            // Check if this is a task item (contains task information)
+            if (selectedItem.Contains("[PENDING]") || selectedItem.Contains("[COMPLETED]"))
+            {
+                // Find the corresponding task
+                var task = cyberTasks.FirstOrDefault(t => selectedItem.Contains(t.Title));
+                if (task != null)
+                {
+                    // Toggle completion status
+                    task.IsCompleted = !task.IsCompleted;
+                    string action = task.IsCompleted ? "completed" : "marked as pending";
+                    AddToActivityLog($"Task '{task.Title}' {action}");
+
+                    // Refresh the display
+                    RefreshTaskDisplay();
+
+                    // Add chatbot response
+                    string response = task.IsCompleted ?
+                        $"Amazing work! Task '{task.Title}' has been marked as completed. Keep up the good cybersecurity practices!" :
+                        $"Task '{task.Title}' has been marked as pending again.";
+
+                    AddChatbotResponse(response);
+                }//end of inner if statement
+            }//end of other outer if statement
+        }//end of method showchatsMouseDoubleClick
+
+
+        //A method to refresh task display in ListView
+        private void RefreshTaskDisplay()
+        {
+            // Clear current display
+            var chatItems = show_chats.Items.Cast<string>().Where(item =>
+                !item.Contains("[PENDING]") && !item.Contains("[COMPLETED]")).ToList();
+
+            show_chats.Items.Clear();
+
+            // Add back non-task chat items
+            foreach (var item in chatItems)
+            {
+                show_chats.Items.Add(item);
+            }
+
+            // Add all tasks
+            foreach (var task in cyberTasks)
+            {
+                show_chats.Items.Add(task.ToString());
+            }
+
+            // Update stats after refreshing
+            UpdateStatistics();
+
+            // Auto scroll to bottom
+            if (show_chats.Items.Count > 0)
+            {
+                show_chats.ScrollIntoView(show_chats.Items[show_chats.Items.Count - 1]);
             }
         }
 
-    }
-}
+        // Method to add chatbot responses
+        private void AddChatbotResponse(string response)
+        {
+            DateTime now = DateTime.Now;
+            string timestamp = now.ToString("yyyy-MM-dd HH:mm");
+            show_chats.Items.Add($"Chatbot [{timestamp}]: {response}");
+            show_chats.ScrollIntoView(show_chats.Items[show_chats.Items.Count - 1]);
+        }
 
 
-        
 
-    
+
+
+
+
 
 
