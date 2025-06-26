@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Text.RegularExpressions;
 using static Chatbot_Project_Part3.MainWindow;
 
 
@@ -18,6 +19,8 @@ namespace Chatbot_Project_Part3
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
+    /// Enhanced Cybersecurity Awareness Chatbot with NLP Simulation
+    /// Now featuring advanced natural language processing capabilities!
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -61,6 +64,15 @@ namespace Chatbot_Project_Part3
         private int totalQuizzesTaken = 0;
         private int bestScore = 0;
 
+        // NLP SIMULATION ENHANCEMENT - Advanced Natural Language Processing Variables
+        // These dictionaries help the chatbot understand different ways users express the same intent
+
+        private Dictionary<string, List<string>> intentKeywords;
+        private Dictionary<string, List<string>> synonymDictionary;
+        private Dictionary<string, string> commonTypos;
+        private List<string> conversationalPhrases;
+        private int nlpInteractionCount = 0; // Track how many times NLP helped understand user intent
+
 
         public MainWindow()
         {
@@ -69,7 +81,7 @@ namespace Chatbot_Project_Part3
             AddToActivityLog("Cybersecurity Awareness Chatbot started");
             UpdateStatistics();
             ShowWelcomeMessage();
-        }//end of MainWindow
+        }//end of MainWindow constructor
 
 
         //A method to show a fun welcome message
@@ -187,6 +199,10 @@ namespace Chatbot_Project_Part3
             completed_count.Text = completedTasks.ToString();
             total_count.Text = totalTasks.ToString();
             security_score.Text = securityScore + "%";
+
+            // Update quiz stats
+            quiz_best_score.Text = bestScore + "%";
+            quiz_count.Text = totalQuizzesTaken.ToString();
 
             // Update status based on score
             if (securityScore >= 80)
@@ -666,7 +682,7 @@ namespace Chatbot_Project_Part3
             else
             {
                 AddChatbotResponse($"❌ Incorrect. The right answer was: {question.Options[question.CorrectAnswer]}");
-                AddChatbotResponse(question.Explanation.Replace("🎯 Correct!", "💡 Remember:"));
+                AddChatbotResponse(question.Explanation.Replace(" Correct!", "💡 Remember:"));
             }
 
             currentQuestionIndex++;
@@ -715,8 +731,8 @@ namespace Chatbot_Project_Part3
             }
             else
             {
-                AddChatbotResponse("📚KEEP LEARNING! Cybersecurity is important! ⚠️");
-                AddChatbotResponse("Try reading about phishing, passwords, and safe browsing! 🛡️");
+                AddChatbotResponse(" KEEP LEARNING! Cybersecurity is important! ⚠️");
+                AddChatbotResponse(" Try reading about phishing, passwords, and safe browsing! 🛡️");
             }
 
             AddChatbotResponse(" Type 'start quiz' to try again or 'quiz stats' to see your progress!");
