@@ -240,7 +240,7 @@ namespace Chatbot_Project_Part3
         // A method to handle adding new tasks
         private void HandleAddTask(string input)
         {
-            // Simple task extraction - in a real NLP system, this would be more sophisticated
+            // Getting the title of a task from user input and generating a task description about that task
             string taskTitle = ExtractTaskTitle(input);
             string taskDescription = GenerateTaskDescription(taskTitle);
 
@@ -388,6 +388,43 @@ namespace Chatbot_Project_Part3
             AddChatbotResponse(response);
         }
 
+        // A method to handle deleting tasks
+        private void HandleDeleteTask(string input)
+        {
+            //User will double click on the task they wishto delete
+            AddChatbotResponse("To delete a task, please double-click on a completed task in the list above.");
+        }//end of handle delete task method 
+
+        // Handle showing activity log
+        private void HandleShowActivityLog()
+        {
+            if (activityLog.Count == 0)
+            {
+                AddChatbotResponse("No recent activities to show.");
+                return;
+            }
+
+            string response = "Here's your recent activity:\n";
+            for (int i = Math.Max(0, activityLog.Count - 5); i < activityLog.Count; i++)
+            {
+                response += $"• {activityLog[i]}\n";
+            }
+
+            AddChatbotResponse(response);
+        }//end of handle show activity log method
+
+        // A method to handle help command, this guides the user 
+        private void HandleHelp()
+        {
+            string helpText = "Cybersecurity Awareness Chatbot Commands:\n" +
+                            "• 'Add task [description]' - Add a new cybersecurity task\n" +
+                            "• 'Show tasks' - View all your tasks\n" +
+                            "• 'Activity log' - See recent actions\n" +
+                            "• Double-click on tasks to mark them complete\n" +
+                            "• Ask me about cybersecurity topics for advice!";
+
+            AddChatbotResponse(helpText);
+        }//end of handle help method
 
 
 
