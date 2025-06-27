@@ -390,7 +390,72 @@ namespace Chatbot_Project_Part3
             {
                 AddChatbotResponse($"💡 Showing last {MAX_LOG_DISPLAY} activities. Type 'show full log' for complete history.");
             }
-        }
+        }//end of handle show detailed activity log method
+
+        // A method to show full activity log
+        private void HandleShowFullActivityLog()
+        {
+            if (enhancedActivityLog.Count == 0)
+            {
+                AddChatbotResponse(" No activities recorded yet. 📝");
+                return;
+            }
+
+            AddChatbotResponse($" Complete Activity History ({enhancedActivityLog.Count} total activities):");
+
+            // Group activities by category for better organization
+            var grouped = enhancedActivityLog.GroupBy(e => e.Category);
+
+            foreach(var group in grouped)
+    {
+                string categoryName = GetCategoryDisplayName(group.Key);
+                string emoji = GetCategoryEmoji(group.Key);
+                AddChatbotResponse($"");
+                AddChatbotResponse($"{emoji} {categoryName} ({group.Count()} activities):");
+
+                foreach (var entry in group.TakeLast(5)) // Show last 5 per category
+                {
+                    string details = !string.IsNullOrEmpty(entry.Details) ? $" - {entry.Details}" : "";
+                    AddChatbotResponse($"   • {entry.Timestamp:MM/dd HH:mm} - {entry.Action}{details}");
+                }
+            }
+        }//end of handle full activity log method
+
+        // A helper method to get emoji for activity category (fun feature!)
+        private string GetCategoryEmoji(string category)
+        {
+            return category switch
+            {
+                "TASK_ADDED" => "✅",
+                "TASK_COMPLETED" => "🎉",
+                "TASK_UPDATED" => "🔄",
+                "REMINDER_SET" => "⏰",
+                "QUIZ_STARTED" => "🎯",
+                "QUIZ_COMPLETED" => "🏆",
+                "NLP_INTERACTION" => "🧠",
+                "CYBERSECURITY_EDUCATION" => "🛡️",
+                "SYSTEM" => "⚙️",
+                _ => "📝"
+            };
+        }//end of get category emoji method
+
+        // A helper method to get display name for category
+        private string GetCategoryDisplayName(string category)
+        {
+            return category switch
+            {
+                "TASK_ADDED" => "Tasks Added",
+                "TASK_COMPLETED" => "Tasks Completed",
+                "TASK_UPDATED" => "Tasks Updated",
+                "REMINDER_SET" => "Reminders Set",
+                "QUIZ_STARTED" => "Quizzes Started",
+                "QUIZ_COMPLETED" => "Quizzes Completed",
+                "NLP_INTERACTION" => "Natural Language Processing",
+                "CYBERSECURITY_EDUCATION" => "Cybersecurity Education",
+                "SYSTEM" => "System Activities",
+                _ => "Other Activities"
+            };
+        }//end of get category display name method
 
 
         // When the task is double clicked on the list view
