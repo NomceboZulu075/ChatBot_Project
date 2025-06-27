@@ -57,6 +57,20 @@ namespace Chatbot_Project_Part3
             public bool IsTrueFalse { get; set; }
         }//end of quizquestion class
 
+        // Activity Log Entry Class 
+        public class ActivityLogEntry
+        {
+            public DateTime Timestamp { get; set; }
+            public string Action { get; set; }
+            public string Category { get; set; }
+            public string Details { get; set; }
+
+            public override string ToString()
+            {
+                return $"{Timestamp:MM/dd/yyyy HH:mm} - {Action}";
+            }
+        }
+
         private List<QuizQuestion> quizQuestions = new List<QuizQuestion>();
         private int currentQuestionIndex = 0;
         private int quizScore = 0;
@@ -72,6 +86,8 @@ namespace Chatbot_Project_Part3
         private Dictionary<string, string> commonTypos;
         private List<string> conversationalPhrases;
         private int nlpInteractionCount = 0; // Track how many times NLP helped understand user intent
+        private List<ActivityLogEntry> enhancedActivityLog = new List<ActivityLogEntry>();
+        private const int MAX_LOG_DISPLAY = 10; // Show last 10 actions by default
 
 
         public MainWindow()
@@ -315,6 +331,67 @@ namespace Chatbot_Project_Part3
                 activityLog.RemoveAt(0);
             }//end of if statement
         }//end of add activity log method
+
+        // ENHANCED METHOD: Add detailed activity log entries
+        private void AddToEnhancedActivityLog(string action, string category, string details = "")
+        {
+            var logEntry = new ActivityLogEntry
+            {
+                Timestamp = DateTime.Now,
+                Action = action,
+                Category = category,
+                Details = details
+            };
+
+            enhancedActivityLog.Add(logEntry);
+
+            // Keep only last 50 entries for memory management
+            if (enhancedActivityLog.Count > 50)
+            {
+                enhancedActivityLog.RemoveAt(0);
+            }
+
+            // Also add to the simple activity log for backward compatibility
+            AddToActivityLog(action);
+        }//end of add to enhanced activity log method
+
+        // A method to handle showing detailed activity log
+        private void HandleShowDetailedActivityLog()
+        {
+            if (enhancedActivityLog.Count == 0)
+            {
+                AddChatbotResponse(" No recent activities to show. Start using the chatbot to build your activity history!");
+                return;
+            }
+
+            AddChatbotResponse(" Here's a summary of your recent cybersecurity activities:");
+
+            // Show last 10 activities by default
+            var recentActivities = enhancedActivityLog.TakeLast(MAX_LOG_DISPLAY).ToList();
+
+            for (int i = 0; i < recentActivities.Count; i++)
+            {
+                var entry = recentActivities[i];
+                string emoji = GetCategoryEmoji(entry.Category);
+                string details = !string.IsNullOrEmpty(entry.Details) ? $" - {entry.Details}" : "";
+
+                AddChatbotResponse($"{emoji} {i + 1}. {entry.Action}{details}");
+            }
+
+            // Show statistics
+            AddChatbotResponse($"");
+            AddChatbotResponse($" Activity Summary:");
+            AddChatbotResponse($"   • Total actions logged: {enhancedActivityLog.Count}");
+            AddChatbotResponse($"   • Tasks created: {enhancedActivityLog.Count(e => e.Category == "TASK_ADDED")}");
+            AddChatbotResponse($"   • Quizzes taken: {enhancedActivityLog.Count(e => e.Category == "QUIZ_COMPLETED")}");
+            AddChatbotResponse($"   • NLP interactions: {enhancedActivityLog.Count(e => e.Category == "NLP_INTERACTION")}");
+
+            if (enhancedActivityLog.Count > MAX_LOG_DISPLAY)
+            {
+                AddChatbotResponse($"💡 Showing last {MAX_LOG_DISPLAY} activities. Type 'show full log' for complete history.");
+            }
+        }
+
 
         // When the task is double clicked on the list view
         private void show_chats_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -731,7 +808,7 @@ namespace Chatbot_Project_Part3
                 lowerInput.Contains("end quiz") || lowerInput.Contains("exit quiz"))
             {
                 isQuizActive = false;
-                AddChatbotResponse("🚪 Quiz ended! You can start a new quiz anytime by typing 'start quiz'.");
+                AddChatbotResponse(" Quiz ended! You can start a new quiz anytime by typing 'start quiz'.");
                 AddToActivityLog("Quiz ended by user request");
                 return;
             }
