@@ -15,6 +15,7 @@ using System.Text.RegularExpressions;
 using static Chatbot_Project_Part3.MainWindow;
 using Microsoft.VisualBasic;
 using System.Windows.Controls.Primitives;
+using ChatBot_Project; // Make sure this namespace matches your project
 
 
 namespace Chatbot_Project_Part3
@@ -26,6 +27,10 @@ namespace Chatbot_Project_Part3
     /// </summary>
     public partial class MainWindow : Window
     {
+        // Instance of your chatbot components
+        private ChatBotWPFAdapter chatBotAdapter;
+        private CheckTextFile checkTextFile;
+        private List<string> conversationMemory;
         // Task class to store task information
         public class taskInformation
         {
