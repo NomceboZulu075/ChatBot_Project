@@ -13,6 +13,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using static Chatbot_Project_Part3.MainWindow;
+using Microsoft.VisualBasic;
+using System.Windows.Controls.Primitives;
 
 
 namespace Chatbot_Project_Part3
@@ -476,7 +478,16 @@ namespace Chatbot_Project_Part3
                     // Toggle completion status
                     task.IsCompleted = !task.IsCompleted;
                     string action = task.IsCompleted ? "completed" : "marked as pending";
-                    AddToActivityLog($"Task '{task.Title}' {action}");
+
+                    if (task.IsCompleted)
+                    {
+                        AddToEnhancedActivityLog($"Task completed: '{task.Title}'", "TASK_COMPLETED",
+                            $"Created: {task.CreatedDate:MM/dd/yyyy}");
+                    }
+                    else
+                    {
+                        AddToEnhancedActivityLog($"Task reopened: '{task.Title}'", "TASK_UPDATED", "Marked as pending again");
+                    }
 
                     // Refresh the display
                     RefreshTaskDisplay();
@@ -608,8 +619,13 @@ namespace Chatbot_Project_Part3
             }
 
             // Add task to the list
-            cyberTasks.Add(newTask);
-            AddToActivityLog($"Task added: '{taskTitle}'");
+            string reminderDetails = reminderDate.HasValue ? $"with reminder on {reminderDate.Value:MM/dd/yyyy}" : "without reminder";
+            AddToEnhancedActivityLog($"Task created: '{taskTitle}'", "TASK_ADDED", reminderDetails);
+
+            if (reminderDate.HasValue)
+            {
+                AddToEnhancedActivityLog($"Reminder set for task '{taskTitle}' on {reminderDate.Value:MM/dd/yyyy}", "REMINDER_SET", taskTitle);
+            }//end of if statement
 
             // Refreshing display and update statistics
             RefreshTaskDisplay();
@@ -618,7 +634,7 @@ namespace Chatbot_Project_Part3
             string response = $"✅ Task added: '{taskTitle}' - {taskDescription}";
             if (reminderDate.HasValue)
             {
-                response += $" ⏰ I'll remind you on {reminderDate.Value:MM/dd/yyyy}.";
+                response += $" ⏰ Reminder set for {reminderDate.Value:MM/dd/yyyy}.";
             }
             else
             {
@@ -797,6 +813,9 @@ namespace Chatbot_Project_Part3
                             "• 'Add task [description]' - Add a new cybersecurity task\n" +
                             "• 'Show tasks' - View all your tasks\n" +
                             "• 'Start quiz' - Test your cybersecurity knowledge\n" +
+                            "• 'Show activity log' - View recent actions I've taken for you\n" + 
+                            "• 'Show full log' - View complete activity history\n" +          
+                            "• 'What have you done for me?' - Show summary of activities\n" +
                             "• 'Quiz statistics' - View your quiz performance\n" +
                             "• 'Activity log' - See recent actions\n" +
                             "• Ask me about phishing, passwords, malware, etc.\n" +
@@ -943,6 +962,9 @@ namespace Chatbot_Project_Part3
                 AddChatbotResponse("🏆 NEW PERSONAL BEST! 🏆");
             }
 
+            AddToEnhancedActivityLog($"Quiz completed: {quizScore}/{quizQuestions.Count} correct ({percentage}%)",
+            "QUIZ_COMPLETED", $"Best score: {bestScore}%");
+
             AddChatbotResponse(" Quiz Complete! ");
             AddChatbotResponse($"📊 Your Score: {quizScore}/{quizQuestions.Count} ({percentage}%)");
 
@@ -1057,12 +1079,22 @@ namespace Chatbot_Project_Part3
             AddToActivityLog($"Responded to query about: {input}");
         }//end of handle general query method
 
-        // Enhanced NLP method to better understand user intent through keyword detection and pattern matching
+        // A method to better understand user intent through keyword detection and pattern matching
         private string DetectUserIntent(string input)
         {
             string lowerInput = input.ToLower();
 
-            // Check for quit quiz first (before other quiz-related intents)
+            if (lowerInput.Contains("show activity log") || lowerInput.Contains("activity log") ||
+            lowerInput.Contains("what have you done") || lowerInput.Contains("show log") ||
+            lowerInput.Contains("recent actions") || lowerInput.Contains("what did you do") ||
+            lowerInput.Contains("activity history") || lowerInput.Contains("log history"))
+                return "SHOW_ACTIVITY_LOG";
+
+            if (lowerInput.Contains("show full log") || lowerInput.Contains("complete log") ||
+                lowerInput.Contains("full activity") || lowerInput.Contains("all activities"))
+                return "SHOW_FULL_LOG";
+
+            // Check for quit quiz 
             if (lowerInput.Contains("quit quiz") || lowerInput.Contains("stop quiz") ||
                 lowerInput.Contains("exit quiz") || lowerInput.Contains("end quiz") ||
                 lowerInput.Contains("cancel quiz") || lowerInput.Contains("abort quiz"))
@@ -1098,6 +1130,8 @@ namespace Chatbot_Project_Part3
                 return "CYBERSECURITY_QUERY";
 
             return "GENERAL_QUERY";
+
+            
         }//end of detect user intent method
 
         // NLP helper method to detect task-related keywords in natural language
@@ -1266,6 +1300,9 @@ namespace Chatbot_Project_Part3
         {
             nlpInteractionCount++; // Track NLP usage 
 
+            //Track NLP interactions
+            AddToEnhancedActivityLog($"NLP processed intent: {intent}", "NLP_INTERACTION", $"Input: '{originalInput}'");
+
             switch (intent)
             {
                 case "ADD_TASK":
@@ -1276,6 +1313,7 @@ namespace Chatbot_Project_Part3
                     break;
                 case "START_QUIZ":
                     AddChatbotResponse("I understand you'd like to test your knowledge! Starting the cybersecurity quiz now...");
+                    AddToEnhancedActivityLog("Quiz started via NLP", "QUIZ_STARTED", "Natural language command");
                     StartQuiz();
                     break;
                 case "VIEW_TASKS":
@@ -1283,8 +1321,11 @@ namespace Chatbot_Project_Part3
                     HandleShowTasks();
                     break;
                 case "SHOW_SUMMARY":
-                    AddChatbotResponse("Here's a summary of what we've accomplished together:");
+                case "SHOW_ACTIVITY_LOG":
                     HandleShowActivityLog();
+                    break;
+                case "SHOW_FULL_LOG":
+                    HandleShowFullActivityLog();
                     break;
                 case "HELP":
                     AddChatbotResponse("I'd be happy to help! Here's what I can do for you:");
